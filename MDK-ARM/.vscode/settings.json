@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "struct_typedef.h": "c",
+        "can_receive.h": "c",
+        "cmsis_os.h": "c",
+        "string": "c"
+    }
+}
