@@ -2,6 +2,9 @@ rov\socket_send.o: ..\application\socket_send.c
 rov\socket_send.o: ..\application\socket_send.h
 rov\socket_send.o: ..\application\protocol\protocol.h
 rov\socket_send.o: ..\application\struct_typedef.h
+rov\socket_send.o: ..\application\comunication.h
+rov\socket_send.o: ..\application\IMU_receive.h
+rov\socket_send.o: ..\components\controller\pid.h
 rov\socket_send.o: ../Inc/main.h
 rov\socket_send.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h
 rov\socket_send.o: ../Inc/stm32h7xx_hal_conf.h
@@ -50,9 +53,6 @@ rov\socket_send.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h
 rov\socket_send.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h
 rov\socket_send.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h
 rov\socket_send.o: D:\Keil5\ARM\ARMCC\Bin\..\include\string.h
-rov\socket_send.o: ..\application\comunication.h
-rov\socket_send.o: ..\application\IMU_receive.h
-rov\socket_send.o: ..\components\controller\pid.h
 rov\socket_send.o: ..\components\suport\CRC8_CRC16.h
 rov\socket_send.o: ..\bsp\bsp_pulse.h
 rov\socket_send.o: ..\application\water_level_task.h
@@ -64,6 +64,7 @@ rov\socket_send.o: ..\application\depth_meter_receive.h
 rov\socket_send.o: ..\application\altimeter_receive.h
 rov\socket_send.o: ..\application\rov_behaviour.h
 rov\socket_send.o: D:\Keil5\ARM\ARMCC\Bin\..\include\stdio.h
+rov\socket_send.o: D:\Keil5\ARM\ARMCC\Bin\..\include\stdarg.h
 rov\socket_send.o: ../Middlewares/Third_Party/LwIP/src/include/lwip/opt.h
 rov\socket_send.o: ../Inc/lwipopts.h
 rov\socket_send.o: ../Middlewares/Third_Party/LwIP/src/include/lwip/debug.h

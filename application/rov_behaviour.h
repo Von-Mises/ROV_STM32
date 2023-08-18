@@ -5,7 +5,7 @@
   * @note       
   * @history
   *  Version    Date            Author          Modification
-  *  V1.0.0     FEB-7-2023     HaoLion(郝亮亮)    1. done
+  *  V1.0.0     FEB-7-2023     Qiqi Li(李琪琪)    1. done
   *
   @verbatim
   ==============================================================================
@@ -50,7 +50,7 @@
 #include "struct_typedef.h"
 #include "rov_movation_task.h"
 
-#define ROV_OPEN_ANGLE_SCALE      20 					// 开环模式下角度的比例系数
+#define ROV_OPEN_ANGLE_SCALE      6 					// 开环模式下角度的比例系数
 #define ROV_OPEN_VELOCITY_SCALE   20//25 			// 开环模式下前后或沉浮速度的比例系数
 #define TRACK_OPEN_WZ_SCALE       10 					// 开环模式下履带旋转的比例系数
 #define TRACK_OPEN_VELOCITY_SCALE 20 				 	// 开环模式下履带直线运动的比例系数

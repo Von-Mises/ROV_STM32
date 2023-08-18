@@ -55,6 +55,9 @@ rov\depth_meter_receive.o: D:\Keil5\ARM\ARMCC\Bin\..\include\string.h
 rov\depth_meter_receive.o: ..\application\config.h
 rov\depth_meter_receive.o: ..\application\socket_send.h
 rov\depth_meter_receive.o: ..\application\protocol\protocol.h
+rov\depth_meter_receive.o: ..\application\comunication.h
+rov\depth_meter_receive.o: ..\application\IMU_receive.h
+rov\depth_meter_receive.o: ..\components\controller\pid.h
 rov\depth_meter_receive.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
 rov\depth_meter_receive.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
 rov\depth_meter_receive.o: ../Inc/FreeRTOSConfig.h

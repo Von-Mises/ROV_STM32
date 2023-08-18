@@ -6,7 +6,7 @@
   * @note       
   * @history
   *  Version    Date            Author          Modification
-  *  V1.0.0     Apr-5-2023     HaoLion(郝亮亮)    1. done
+  *  V1.0.0     Apr-5-2023     Qiqi Li(李琪琪)    1. done
   *
   @verbatim
   ==============================================================================
@@ -25,6 +25,20 @@
 //extern void referee_init(void);
 
 extern fifo_s_t tcp_fifo;
+
+/**
+  * @brief          tcp data upacked 
+  * @param[in]      data	data of frame
+  * @param[in]      length of data
+  * @retval         none
+  */
+/**
+  * @brief          数据解包
+  * @param[in]      data 帧原始数据
+  * @param[in]      framelen 帧长度
+  * @retval         none
+  */
+static void tcp_unpack_fifo_data(void);
 
 /**
   * @brief          parse task

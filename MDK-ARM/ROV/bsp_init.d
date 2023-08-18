@@ -13,6 +13,8 @@ rov\bsp_init.o: ..\application\altimeter_receive.h
 rov\bsp_init.o: ..\application\config.h
 rov\bsp_init.o: ..\application\socket_send.h
 rov\bsp_init.o: ..\application\protocol\protocol.h
+rov\bsp_init.o: ..\application\comunication.h
+rov\bsp_init.o: ..\components\controller\pid.h
 rov\bsp_init.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
 rov\bsp_init.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
 rov\bsp_init.o: D:\Keil5\ARM\ARMCC\Bin\..\include\stddef.h

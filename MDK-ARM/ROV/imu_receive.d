@@ -54,6 +54,8 @@ rov\imu_receive.o: ..\components\suport\CRC8_CRC16.h
 rov\imu_receive.o: ..\application\config.h
 rov\imu_receive.o: ..\application\socket_send.h
 rov\imu_receive.o: ..\application\protocol\protocol.h
+rov\imu_receive.o: ..\application\comunication.h
+rov\imu_receive.o: ..\components\controller\pid.h
 rov\imu_receive.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
 rov\imu_receive.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
 rov\imu_receive.o: ../Inc/FreeRTOSConfig.h

@@ -67,6 +67,8 @@ rov\tem_hum_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h
 rov\tem_hum_task.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h
 rov\tem_hum_task.o: ..\application\socket_send.h
 rov\tem_hum_task.o: ..\application\protocol\protocol.h
+rov\tem_hum_task.o: ..\application\comunication.h
+rov\tem_hum_task.o: ..\application\IMU_receive.h
+rov\tem_hum_task.o: ..\components\controller\pid.h
 rov\tem_hum_task.o: ..\application\altimeter_receive.h
 rov\tem_hum_task.o: ..\application\thruster.h
-rov\tem_hum_task.o: ..\application\IMU_receive.h

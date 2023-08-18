@@ -52,6 +52,9 @@ rov\thruster.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h
 rov\thruster.o: ..\application\config.h
 rov\thruster.o: ..\application\socket_send.h
 rov\thruster.o: ..\application\protocol\protocol.h
+rov\thruster.o: ..\application\comunication.h
+rov\thruster.o: ..\application\IMU_receive.h
+rov\thruster.o: ..\components\controller\pid.h
 rov\thruster.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
 rov\thruster.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
 rov\thruster.o: ../Inc/FreeRTOSConfig.h

@@ -5,7 +5,7 @@
   * @note       
   * @history
   *  Version    Date            Author          Modification
-  *  V1.0.0     DEC-7-2022     HaoLion(ºÂÁÁÁÁ)    1. done
+  *  V1.0.0     DEC-7-2022     Qiqi Li(Àîç÷ç÷)    1. done
   *
   @verbatim
   ==============================================================================

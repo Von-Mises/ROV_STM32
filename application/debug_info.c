@@ -28,8 +28,7 @@ void debug_info_task(void const * argument)
 {
 	while(1)
 	{
-		uint8_t str[] = "ROV Program is Running!\r\n";
-		msg_send(str,sizeof(str));
-		osDelay(2000);
+		socket_printf("%s\r\n", "ROV Program is Running!");
+		osDelay(1500);
 	}
 }

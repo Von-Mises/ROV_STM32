@@ -23,7 +23,7 @@ typedef enum
 {
 	MOV_CMD_ID = 0X01,						//运动控制命令
 	SET_PID_ID = 0X02,						//设置PID命令
-	SET_POS_ID = 0X03,
+	SET_ATT_ID = 0X03,
 }cmd_type_t;
 
 typedef  struct
@@ -37,7 +37,7 @@ typedef  struct
 typedef enum
 {
   STEP_HEADER_SOF  = 0,
-	STEP_MSG_TYPE		 = 1,
+  STEP_MSG_TYPE	   = 1,
   STEP_LENGTH_LOW  = 2,
   STEP_LENGTH_HIGH = 3,
   STEP_HEADER_CRC8 = 4,
@@ -47,11 +47,11 @@ typedef enum
 
 typedef struct
 {
-  frame_header_struct_t *p_header;
-  uint16_t       data_len;
-  uint8_t        protocol_packet[REC_PROTOCOL_FRAME_MAX_SIZE];
-  unpack_tcp_step_e  unpack_step;
-  uint16_t       index;
+  frame_header_struct_t *p_header;                             //协议帧头结构体
+  uint16_t       data_len;									   //已解析数据长度
+  uint8_t        protocol_packet[REC_PROTOCOL_FRAME_MAX_SIZE]; //接收数据帧最大长度
+  unpack_tcp_step_e  unpack_step;                              //解包状态标志
+  uint16_t       index;			                               //解包数据所存数组下标								
 } unpack_data_t;
 
 

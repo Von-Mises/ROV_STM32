@@ -5,7 +5,7 @@
   * @note       
   * @history
   *  Version    Date            Author          Modification
-  *  V1.0.0     FEB-7-2023     HaoLion(郝亮亮)    1. done
+  *  V1.0.0     FEB-7-2023     Qiqi Li(李琪琪)    1. done
   *
   @verbatim
   ==============================================================================
@@ -49,6 +49,7 @@
 #include "rov_behaviour.h"
 #include "cmsis_os.h"
 #include "arm_math.h"
+#include "socket_send.h"
 
 
 //highlight, the variable rov behaviour mode 
@@ -573,27 +574,20 @@ void rov_angle_loop_calc(fp32 *yaw_control_out, fp32 *pitch_control_out, fp32 *r
 {
 	if(rov_behaviour_mode == ROV_NORMAL || rov_behaviour_mode == ROV_ONLY_ATTHOLD)
 	{
-		fp32 yaw_cur = 0.0f, pitch_cur = 0.0f, roll_cur = 0.0f;
-		fp32 yaw_tar= 0.0f, pitch_tar = 0.0f, roll_tar = 0.0f;
+		fp32 yaw_cur = 0.0f;
+		fp32 yaw_tar= 0.0f;
 		//获取当前值
 		yaw_cur = rov_loop_calc->IMU_data->yaw;
-		pitch_cur = rov_loop_calc->IMU_data->pitch;
-		roll_cur = rov_loop_calc->IMU_data->roll;
 		//获取目标值
 		yaw_tar = rov_loop_calc->yaw_angle_set;
-//		yaw_tar = rov_loop_calc->IMU_data->yaw;
-//		pitch_tar = rov_loop_calc->IMU_data->yaw;
-//		roll_tar = rov_loop_calc->IMU_data->yaw;
-		//过零处理
-		//Over_Zero_Handlle(yaw_tar,yaw_cur,180);
+		if(yaw_tar == 360) yaw_cur = 360;
+		else
+		{
+			if(yaw_tar - yaw_cur > 180) yaw_cur += 360;
+			else if(yaw_tar - yaw_cur < -180) yaw_cur -= 360;
+		}
 		//计算角度环（外环）
-		PID_calc(&rov_loop_calc->yaw_angle_pid, yaw_cur, yaw_tar);
-//		PID_calc(&rov_loop_calc->pitch_angle_pid, pitch_cur, pitch_tar);
-//		PID_calc(&rov_loop_calc->roll_angle_pid, roll_cur, roll_tar);
-		//计算角速度环（内环）
-		*yaw_control_out = PID_calc(&rov_loop_calc->yaw_angular_velocity_pid, rov_loop_calc->IMU_data->gz, rov_loop_calc->yaw_angle_pid.out);
-//		*pitch_control_out = PID_calc(&rov_loop_calc->pitch_angular_velocity_pid, rov_loop_calc->IMU_data->gx, rov_loop_calc->pitch_angle_pid.out);
-//		*roll_control_out = PID_calc(&rov_loop_calc->roll_angular_velocity_pid, rov_loop_calc->IMU_data->gy, rov_loop_calc->roll_angle_pid.out);
+		*yaw_control_out = PID_calc(&rov_loop_calc->yaw_angle_pid, yaw_cur, yaw_tar);
 	}
 	else
 	{
@@ -636,7 +630,7 @@ void rov_angle_loop_calc(fp32 *yaw_control_out, fp32 *pitch_control_out, fp32 *r
 }
 
 /**
-	* @brief          ROV定深控制输出
+	* @brief        ROV定深控制输出
   * @param[in]      depth_control_out 定深控制量输出
   * @param[in]      rov_loop_calc ROV数据
   * @retval         none
@@ -648,21 +642,27 @@ void rov_depth_loop_calc(fp32 *depth_control_out, rov_move_t * rov_loop_calc)
 	fp32 cur_vz_set = rov_loop_calc->vz_set;
 	if(rov_behaviour_mode == ROV_ONLY_ALTHOLD || rov_behaviour_mode == ROV_NORMAL)
 	{
-		//当推杆进入稳定区时候，重新设置定深值
-		if((last_vz_set > ROV_DEPTH_HOLD_DEADLINE && cur_vz_set <= ROV_DEPTH_HOLD_DEADLINE ) 
-			|| (last_vz_set < -ROV_DEPTH_HOLD_DEADLINE && cur_vz_set >= -ROV_DEPTH_HOLD_DEADLINE))
-		{
-			rov_loop_calc->depth_set = rov_loop_calc->depth;
-		}
-		//如果推杆速度过小，则进入定深环计算，否则开环发送
-		if(cur_vz_set <= ROV_DEPTH_HOLD_DEADLINE && cur_vz_set >= -ROV_DEPTH_HOLD_DEADLINE)
-		{
-			*depth_control_out = PID_calc(&rov_loop_calc->depth_loop_pid, rov_loop_calc->depth, rov_loop_calc->depth_set);
-		}
-		else
-		{
-			*depth_control_out = cur_vz_set*ROV_OPEN_VELOCITY_SCALE;
-		}
+//		//当推杆进入稳定区时候，重新设置定深值
+//		if((last_vz_set > ROV_DEPTH_HOLD_DEADLINE && cur_vz_set <= ROV_DEPTH_HOLD_DEADLINE ) 
+//			|| (last_vz_set < -ROV_DEPTH_HOLD_DEADLINE && cur_vz_set >= -ROV_DEPTH_HOLD_DEADLINE))
+//		{
+//			rov_loop_calc->depth_set = rov_loop_calc->depth;
+//		}
+//		//如果推杆速度过小，则进入定深环计算，否则开环发送
+//		if(cur_vz_set <= ROV_DEPTH_HOLD_DEADLINE && cur_vz_set >= -ROV_DEPTH_HOLD_DEADLINE)
+//		{
+//			*depth_control_out = PID_calc(&rov_loop_calc->depth_loop_pid, rov_loop_calc->depth, rov_loop_calc->depth_set);
+//		}
+//		else
+//		{
+//			*depth_control_out = cur_vz_set*ROV_OPEN_VELOCITY_SCALE;
+//		}
+		//获取当前值
+		fp32 depth_cur = rov_loop_calc->depth;
+		//获取目标值
+		fp32 depth_tar = rov_loop_calc->depth_set;
+		//计算深度环
+		*depth_control_out = PID_calc(&rov_loop_calc->depth_loop_pid, depth_cur, depth_tar);
 	}
 	else
 	{
@@ -721,7 +721,7 @@ void track_turn_loop_calc(fp32 *track_wz_out, rov_move_t * rov_loop_calc)
 }
 
 /**
-	* @brief          ROV艏向速度控制输出（开环）
+	* @brief        ROV艏向速度控制输出（开环）
   * @param[in]      vf_control_out 艏向速度控制输出
   * @param[in]      track_vf_control_out 履带模式下前进速度控制输出
   * @param[in]      rov_loop_calc ROV数据

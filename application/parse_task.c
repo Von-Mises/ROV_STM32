@@ -6,7 +6,7 @@
   * @note       
   * @history
   *  Version    Date            Author          Modification
-  *  V1.0.0     Apr-5-2023     HaoLion(郝亮亮)    1. done
+  *  V1.0.0     Apr-5-2023     Qiqi Li(李琪琪)    1. done
   *
   @verbatim
   ==============================================================================
@@ -28,21 +28,6 @@
 fifo_s_t tcp_fifo;
 uint8_t tcp_fifo_buf[TCP_FIFO_BUF_LENGTH];
 unpack_data_t tcp_unpack_obj;
-	
-	
-/**
-  * @brief          tcp data upacked 
-  * @param[in]      data	data of frame
-  * @param[in]      length of data
-  * @retval         none
-  */
-/**
-  * @brief          数据解包
-  * @param[in]      data 帧原始数据
-  * @param[in]      framelen 帧长度
-  * @retval         none
-  */
-static void tcp_unpack_fifo_data(void);
 	
 	/**
   * @brief          parse task
@@ -104,7 +89,7 @@ void tcp_unpack_fifo_data()
         }
       }break;
 			
-			case STEP_MSG_TYPE:
+	  case STEP_MSG_TYPE:
       {
         p_obj->protocol_packet[p_obj->index++] = byte;
         p_obj->unpack_step = STEP_LENGTH_LOW;

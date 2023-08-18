@@ -1,8 +1,10 @@
 rov\comunication.o: ..\application\comunication.c
-rov\comunication.o: ..\application\comunication.h
+rov\comunication.o: ..\application\rov_movation_task.h
 rov\comunication.o: ..\application\struct_typedef.h
+rov\comunication.o: ..\application\comunication.h
 rov\comunication.o: ..\application\IMU_receive.h
 rov\comunication.o: ..\components\controller\pid.h
+rov\comunication.o: ..\components\algorithm\user_lib.h
 rov\comunication.o: D:\Keil5\ARM\ARMCC\Bin\..\include\string.h
 rov\comunication.o: D:\Keil5\ARM\ARMCC\Bin\..\include\stdio.h
 rov\comunication.o: ..\components\suport\CRC8_CRC16.h

@@ -5,7 +5,7 @@
   * @note       
   * @history
   *  Version    Date            Author          Modification
-  *  V1.0.0     DEC-14-2022     HaoLion(郝亮亮)    1. done
+  *  V1.0.0     DEC-14-2022     Qiqi Li(李琪琪)    1. done
   *
   @verbatim
   ==============================================================================
@@ -39,7 +39,7 @@ void pwm_task(void const * argument)
 	pwm_init();
 	while(1)
 	{
-		/*将数据映射到对应wm范围区间*/
+		/*将数据映射到对应pwm范围区间*/
 		steering_gear_angle_pwm = (uint16_t)(rov_pwm_Ctrl->steering_gear_angle*25/9.0+375);  
 		brightness_pwm = (uint16_t)(rov_pwm_Ctrl->brightness*2+275);
 		servo_pwm_set(steering_gear_angle_pwm);

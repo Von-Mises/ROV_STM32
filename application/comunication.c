@@ -5,7 +5,7 @@
   * @note       
   * @history
   *  Version    Date            Author          Modification
-  *  V1.0.0     DEC-12-2022     HaoLion(ºÂÁÁÁÁ)    1. done
+  *  V1.0.0     DEC-12-2022     Qiqi Li(Àîç÷ç÷)    1. done
   *															ZhangYujio(ÕÅîÚ¾¼)
   @verbatim
   ==============================================================================
@@ -15,13 +15,14 @@
   ****************************(C) COPYRIGHT 2022 ZJU****************************
   */
 
+#include "rov_movation_task.h"
 #include "comunication.h"
 #include "string.h"
 #include "stdio.h"
 #include "CRC8_CRC16.h"
 #include "protocol.h"
 
-
+extern rov_move_t rov_move;
 frame_header_struct_t rov_recieve_header;
 frame_header_struct_t rov_send_header;
 
@@ -85,9 +86,10 @@ void receive_data_solve(uint8_t *frame)
         case SET_PID_ID:
         {
             memcpy(&PIDs_set, frame + index, sizeof(ext_PIDs_set_t));
+			rov_move.pid_change = 1;
         }
         break;
-		case SET_POS_ID:
+		case SET_ATT_ID:
 		{
 			memcpy(&pos_control_cmd, frame + index, sizeof(ext_control_pos_t));
 		}

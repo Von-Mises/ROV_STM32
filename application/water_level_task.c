@@ -5,8 +5,8 @@
   * @note       
   * @history
   *  Version    Date            Author          Modification
-  *  V1.0.0     DEC-7-2022     HaoLion(ºÂÁÁÁÁ)    1. done
-	*  V1.0.1     MAR-29-2023    HaoLion(ºÂÁÁÁÁ)   	2. over
+  *  V1.0.0     DEC-7-2022     Qiqi Li(Àîç÷ç÷)    1. done
+  *  V1.0.1     MAR-29-2023    Qiqi Li(Àîç÷ç÷)   	2. over
   *
   @verbatim
   ==============================================================================
@@ -57,7 +57,7 @@ static fp32 calc_percentage(float voltage)
 {
     fp32 percentage;
     
-		percentage = voltage/FULL_WATER_VOLTAGE;
+	percentage = voltage/FULL_WATER_VOLTAGE;
     return percentage;
 }
 

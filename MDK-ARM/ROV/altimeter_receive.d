@@ -52,6 +52,9 @@ rov\altimeter_receive.o: ..\bsp\bsp_usart.h
 rov\altimeter_receive.o: ..\application\config.h
 rov\altimeter_receive.o: ..\application\socket_send.h
 rov\altimeter_receive.o: ..\application\protocol\protocol.h
+rov\altimeter_receive.o: ..\application\comunication.h
+rov\altimeter_receive.o: ..\application\IMU_receive.h
+rov\altimeter_receive.o: ..\components\controller\pid.h
 rov\altimeter_receive.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
 rov\altimeter_receive.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
 rov\altimeter_receive.o: ../Inc/FreeRTOSConfig.h

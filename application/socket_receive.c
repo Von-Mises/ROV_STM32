@@ -5,7 +5,7 @@
   * @note       
   * @history
   *  Version    Date            Author          Modification
-  *  V1.0.0     DEC-7-2022     HaoLion(郝亮亮)    1. done
+  *  V1.0.0     DEC-7-2022     Qiqi Li(李琪琪)    1. done
   *
   @verbatim
   ==============================================================================
@@ -29,18 +29,7 @@
 #include "lwip/api.h"
 #include <lwip/sockets.h>
 
-
 extern fifo_s_t tcp_fifo;
-
-#if IP_DEBUG
-/**
-  * @brief          通过usart1发送网络数据
-  * @param[in]      ip_data: sbus数据
-  * @param[in]      dat_len: 网络包长度
-  * @retval         none
-  */
-static void ip_to_usart1(uint8_t *ip_data,uint8_t dat_len);
-#endif
 
 /**
   * @brief          server_receive_task
@@ -100,17 +89,15 @@ void server_receive_task(void const * argument)
 		{
 			int flag = 1;
 			setsockopt(connected,
-								IPPROTO_TCP, /* set option at TCP level */
-								TCP_NODELAY, /* name of option */
-								(void *) &flag, /* the cast is historical cruft */
-								sizeof(int)); /* length of option value */
+						IPPROTO_TCP, /* set option at TCP level */
+						TCP_NODELAY, /* name of option */
+						(void *) &flag, /* the cast is historical cruft */
+						sizeof(int)); /* length of option value */
 		}
 		while (1)
 		{
 			recv_data_len = recv(connected, recv_data, RECV_DATA, 0);
-			if (recv_data_len <= 0)
-				break;
-//			printf("recv %d len data\n",recv_data_len);
+			if (recv_data_len <= 0) break;
 			#if IP_DEBUG
 			ip_to_usart1(recv_data,recv_data_len);
 			#endif
@@ -118,15 +105,14 @@ void server_receive_task(void const * argument)
 			if(fifo_s_isfull(&tcp_fifo))
 			{
 				fifo_s_flush(&tcp_fifo);
-				printf("fifo is full\n");
+				//printf("fifo is full\n");
 			}
 			/*存入FIFO*/
 			fifo_s_puts(&tcp_fifo,(char*)recv_data, recv_data_len);
 			
 		}
 		/*客户端消息发送失败，断开连接*/
-		if (connected >= 0)
-			closesocket(connected);
+		if (connected >= 0) closesocket(connected);
 		connected = -1;
 	}	
 __exit:

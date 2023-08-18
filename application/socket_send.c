@@ -2,11 +2,12 @@
   ****************************(C) COPYRIGHT 2022 ZJU****************************
   * @file       socket_send.c/h
   * @brief      tcp发送任务，每10ms向上位机更新一次状态
-	*							还可以支持发送文本消息便于调试，文本消息将会被发送在消息队列中
+	*			还可以支持发送文本消息便于调试，文本消息将会被发送在消息队列中
   * @note       
   * @history
   *  Version    Date            Author          Modification
-  *  V1.0.0     DEC-13-2022     HaoLion(郝亮亮)    1. done
+  *  V1.0.0     DEC-13-2022     Qiqi Li(李琪琪)    1. done
+  *								
   *
   @verbatim
   ==============================================================================
@@ -31,6 +32,7 @@
 #include "altimeter_receive.h"
 #include "rov_behaviour.h"
 #include <stdio.h>
+#include <stdarg.h>
 
 #include "lwip/opt.h"
 #include "lwip/sys.h"
@@ -38,7 +40,7 @@
 #include <lwip/sockets.h>
 #include "queue.h"
 
-QueueHandle_t Tcp_Msg_Queue =NULL;
+QueueHandle_t Tcp_Msg_Queue = NULL;
 #define TCP_QUEUE_LEN 10 /* 队列的长度，最大可包含多少个消息 */
 #define TCP_QUEUE_SIZE 4 /* 队列中每个消息大小（字节） */
 
@@ -47,46 +49,10 @@ char *send_data;
 
 typedef struct{
 	uint8_t len;			//数据长度
-	uint8_t pdata[];			//数据指针
+	uint8_t pdata[];		//数据指针
 }queue_data_t;
 
 ext_rov_status_t tcp_rov_status;
-
-/**
-  * @brief          deal with message that from queue
-  * @param[in]      none
-  * @retval         lenth of tcp send data
-  */
-/**
-	* @brief          从消息队列读取消息，通过tcp打包发送
-  * @param[in]      none 
-  * @retval         tcp 发送数据的长度
-  */
-static uint16_t msg_consume(void);
-
-/**
-  * @brief          rov some measure data updata, such as motor speed, euler angle，status of cabin
-  * @param[out]     rov_status_updata: "ext_rov_status_t" valiable point
-  * @retval         none
-  */
-/**
-  * @brief          ROV状态数据更新，包括电机速度，欧拉角度，舱内状态等
-  * @param[out]     rov_status_updata:"ext_rov_status_t"变量指针.
-  * @retval         none
-  */
-static void rov_status_update(ext_rov_status_t *rov_status_updata);
-
-/**
-  * @brief          send status of rov
-  * @param[out]     none
-  * @retval         lenth of tcp send data
-  */
-/**
-	* @brief          发送rov状态
-  * @param[out]     none
-  * @retval         tcp 发送数据的长度
-  */
-static uint16_t rov_send_status(void);
 
 /**
   * @brief          server_send_task
@@ -94,7 +60,7 @@ static uint16_t rov_send_status(void);
   * @retval         none
   */
 /**
-	* @brief          TCP发送任务
+	* @brief        TCP发送任务
   * @param[in]      pvParameters: NULL
   * @retval         none
   */
@@ -106,6 +72,7 @@ void server_send_task(void const * argument)
 	socklen_t sin_size;
 	/*初始化结构体*/
 	init_send_struct_data();
+	
 	/*获取Buffer指针*/
 	send_data = (char *)get_text_buffer();
 	
@@ -154,10 +121,10 @@ void server_send_task(void const * argument)
 		{
 			int flag = 1;
 			setsockopt(connected,
-								IPPROTO_TCP, /* set option at TCP level */
-								TCP_NODELAY, /* name of option */
-								(void *) &flag, /* the cast is historical cruft */
-								sizeof(int)); /* length of option value */
+						IPPROTO_TCP, /* set option at TCP level */
+						TCP_NODELAY, /* name of option */
+						(void *) &flag, /* the cast is historical cruft */
+						sizeof(int)); /* length of option value */
 		}
 		while (1)
 		{
@@ -168,16 +135,14 @@ void server_send_task(void const * argument)
 					break;
 			}
 			osDelay(10);
-			/*40ms上传一次数据*/
+			/*100ms上传一次数据*/
 			rov_status_update(&tcp_rov_status);
 			send_data_len = rov_send_status();
-			if(write(connected,send_data,send_data_len) < 0)
-					break;
-			osDelay(40);
+			if(write(connected,send_data,send_data_len) < 0) break;
+			osDelay(100);
 		}
 		/*客户端消息发送失败，断开连接*/
-		if (connected >= 0)
-			closesocket(connected);
+		if (connected >= 0) closesocket(connected);
 		connected = -1;
 	}	
 __exit:
@@ -186,9 +151,6 @@ __exit:
 	if (Tcp_Msg_Queue == NULL) vQueueDelete(Tcp_Msg_Queue);
 }
 
-
-
-
 /**
   * @brief          send debug info 
   * @param[in]      data	message 
@@ -196,15 +158,14 @@ __exit:
   * @retval         none
   */
 /**
-	* @brief          发送调试信息
+  * @brief        发送调试信息
   * @param[in]      data 文本消息
-  * @param[in]      tlen 	文本长度
+  * @param[in]      tlen 文本长度
   * @retval         none
   */
-void msg_send(const uint8_t* data, uint16_t tlen)
+void msg_send(char* data, uint16_t tlen)
 {
-	if(Tcp_Msg_Queue == NULL)
-		return;
+	if(Tcp_Msg_Queue == NULL) return;
 	//创建队列内存，需要一个字节保存数据的长度，所以数据长度+1
 	queue_data_t* queue_data = (queue_data_t *)pvPortMalloc(tlen+1);
 	queue_data->len = tlen;
@@ -221,14 +182,13 @@ void msg_send(const uint8_t* data, uint16_t tlen)
 	}
 }
 
-
 /**
   * @brief          deal with message that from queue
   * @param[in]      none
   * @retval         lenth of tcp send data
   */
 /**
-	* @brief          从消息队列读取消息，通过tcp打包发送
+  * @brief        从消息队列读取消息，通过tcp打包发送
   * @param[in]      none 
   * @retval         tcp 发送数据的长度
   */
@@ -292,11 +252,35 @@ static void rov_status_update(ext_rov_status_t *rov_status_updata)
   * @retval         lenth of tcp send data
   */
 /**
-	* @brief          发送rov状态
+  * @brief        发送rov状态
   * @param[out]     none
   * @retval         tcp 发送数据的长度
   */
 static uint16_t rov_send_status(void)
 {
 	return send_data_pack(ROV_STATUS_ID,(uint8_t*)&tcp_rov_status,sizeof(ext_rov_status_t));
+}
+
+/**
+  * @brief          send information of rov
+  * @param[out]     none
+  * @retval         lenth of tcp send data
+  */
+/**
+  * @brief          发送rov运行信息
+  * @param[out]     none
+  * @retval         tcp 发送数据的长度
+  */
+int socket_printf(char* format, ...)
+{
+	char str_tmp[REC_TEXT_MAX_SIZE] = {0};
+//	memset(str_tmp, 0, sizeof(str_tmp));
+	uint8_t len = 0;
+	va_list arg;
+	va_start(arg, format);
+	len = vsnprintf(str_tmp, REC_TEXT_MAX_SIZE, format, arg);
+	va_end(arg);
+	
+	msg_send(str_tmp, len);
+	return len;
 }

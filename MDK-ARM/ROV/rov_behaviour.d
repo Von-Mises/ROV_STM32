@@ -29,3 +29,5 @@ rov\rov_behaviour.o: ../Drivers/CMSIS/Include/cmsis_compiler.h
 rov\rov_behaviour.o: ../Drivers/CMSIS/Include/cmsis_armcc.h
 rov\rov_behaviour.o: D:\Keil5\ARM\ARMCC\Bin\..\include\string.h
 rov\rov_behaviour.o: D:\Keil5\ARM\ARMCC\Bin\..\include\math.h
+rov\rov_behaviour.o: ..\application\socket_send.h
+rov\rov_behaviour.o: ..\application\protocol\protocol.h

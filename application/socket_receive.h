@@ -5,7 +5,7 @@
   * @note       
   * @history
   *  Version    Date            Author          Modification
-  *  V1.0.0     DEC-7-2022     HaoLion(郝亮亮)    1. done
+  *  V1.0.0     DEC-7-2022     Qiqi Li(李琪琪)    1. done
   *
   @verbatim
   ==============================================================================
@@ -32,6 +32,16 @@
 
 
 /* ----------------------- Extern Function ----------------------------------- */
+
+#if IP_DEBUG
+/**
+  * @brief          通过usart1发送网络数据
+  * @param[in]      ip_data: sbus数据
+  * @param[in]      dat_len: 网络包长度
+  * @retval         none
+  */
+static void ip_to_usart1(uint8_t *ip_data,uint8_t dat_len);
+#endif
 
 /**
   * @brief          server_receive_task

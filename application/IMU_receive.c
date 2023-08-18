@@ -8,7 +8,7 @@
   * @note       
   * @history
   *  Version    Date            Author          Modification
-  *  V1.0.0     NOV-23-2022     HaoLion(ºÂÁÁÁÁ)    1. done
+  *  V1.0.0     NOV-23-2022     Qiqi Li(Àîç÷ç÷)    1. done
   *
   @verbatim
   ==============================================================================
@@ -165,10 +165,8 @@ void USART3_IRQHandler(void)
 							#if IMU_DEBUG
 							imu_to_usart1(imu_rx_buf[0]);
 							#endif
-					}
-				
-					
-			}
+					}	
+				}
 			else
 			{
 					/* Current memory buffer used is Memory 1 */

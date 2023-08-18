@@ -52,6 +52,9 @@ rov\sth31driver.o: ..\bsp\bsp_i2c.h
 rov\sth31driver.o: ..\application\config.h
 rov\sth31driver.o: ..\application\socket_send.h
 rov\sth31driver.o: ..\application\protocol\protocol.h
+rov\sth31driver.o: ..\application\comunication.h
+rov\sth31driver.o: ..\application\IMU_receive.h
+rov\sth31driver.o: ..\components\controller\pid.h
 rov\sth31driver.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
 rov\sth31driver.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
 rov\sth31driver.o: ../Inc/FreeRTOSConfig.h

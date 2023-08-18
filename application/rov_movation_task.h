@@ -5,7 +5,7 @@
   * @note       
   * @history
   *  Version    Date            Author          Modification
-  *  V1.0.0     DEC-14-2022     HaoLion(郝亮亮)    1. done
+  *  V1.0.0     DEC-14-2022     Qiqi Li(李琪琪)    1. done
   *
   @verbatim
   ==============================================================================
@@ -59,10 +59,10 @@
 
 //depth hold loop PID
 //定深环pid值
-#define ROV_DEPTH_PID_KP 2000.0f
+#define ROV_DEPTH_PID_KP 50000.0f
 #define ROV_DEPTH_PID_KI 0.0f
 #define ROV_DEPTH_PID_KD 0.0f
-#define ROV_DEPTH_PID_MAX_OUT 500.0f
+#define ROV_DEPTH_PID_MAX_OUT 1000.0f
 #define ROV_DEPTH_PID_MAX_IOUT 0.2f
 
 //track mode turn loop PID
@@ -83,10 +83,10 @@
 
 //yaw angle PID
 //Yaw角度pid
-#define ROV_YAW_ANGLE_PID_KP 200.0f
+#define ROV_YAW_ANGLE_PID_KP 1000.0f
 #define ROV_YAW_ANGLE_PID_KI 0.0f
 #define ROV_YAW_ANGLE_PID_KD 0.0f
-#define ROV_YAW_ANGLE_PID_MAX_OUT 500.0f
+#define ROV_YAW_ANGLE_PID_MAX_OUT 1000.0f
 #define ROV_YAW_ANGLE_PID_MAX_IOUT 0.2f
 
 //yaw angular velocity PID
@@ -153,9 +153,10 @@ typedef struct
 	int16_t thruster_speed_set[6];									//设定的推进器转速
 	int16_t track_voltage_set[2];										//设定的履带电机电压
 
-	fp32 depth;																			//深度数据
+	fp32 depth;																		//深度数据
 	fp32 depth_set;																	//设定的深度值
 	fp32 yaw_angle_set;																//设定的定艏角度
+	uint8_t pid_change;																//pid更改标志位
 	pid_type_def depth_loop_pid;										//定深环PID
 	
 	pid_type_def track_speed_pid[2];								//履带电机闭环PID
@@ -191,6 +192,87 @@ typedef struct
 
 
 /* ----------------------- Extern Function ----------------------------------- */
+
+/**
+  * @brief          "rov_move" valiable initialization, include pid initialization, remote control data point initialization, 
+  *                  and IMU data point initialization.
+  * @param[out]     rov_move_init: "rov_move_t" valiable point
+  * @retval         none
+  */
+/**
+  * @brief          初始化"rov_move"变量，包括pid初始化， 遥控器指针初始化，IMU数据指针初始化
+  * @param[out]     rov_move_init:"rov_move_t"变量指针.
+  * @retval         none
+  */
+static void rov_init(rov_move_t *rov_move_init);
+
+/**
+  * @brief          set rov control mode, mainly call 'rov_behaviour_mode_set' function
+  * @param[out]     rov_move_mode: "rov_move_t" valiable point
+  * @retval         none
+  */
+/**
+  * @brief          设置ROV控制模式，主要在'rov_behaviour_mode_set'函数中改变
+  * @param[out]     rov_move_mode:"rov_move_t"变量指针.
+  * @retval         none
+  */
+static void rov_set_mode(rov_move_t *rov_move_mode);
+
+/**
+  * @brief          rov motor speed data updata
+  * @param[out]     rov_move_updata: "rov_move_t" valiable point
+  * @retval         none
+  */
+/**
+  * @brief          ROV电机速度更新
+  * @param[out]     rov_move_updata:"rov_move_t"变量指针.
+  * @retval         none
+  */
+static void rov_feedback_update(rov_move_t *rov_move_updata);
+
+/**
+  * @brief          when rov mode change, some param should be changed
+  * @param[out]     rov_move_transit: "rov_move" valiable point
+  * @retval         none
+  */
+/**
+  * @brief          rov模式改变，有些参数需要改变，
+  * @param[out]     rov_move_transit:"rov_move"变量指针.
+  * @retval         none
+  */
+static void rov_mode_change_control_transit(rov_move_t *rov_move_transit);
+
+/**
+  * @brief          set rov pid parameters
+  * @param[out]     none
+  * @retval         none
+  */
+/**
+  * @brief          rov各环PID参数设置
+  * @param[out]     none
+  * @retval         none
+  */
+static void rov_set_pids(rov_move_t *rov_move_pids);
+
+/**
+  * @brief          控制循环，根据控制设定值，计算各环并且输出速度，进行控制
+  * @param[out]     rov_move_control_loop:"rov_move"变量指针.
+  * @retval         none
+  */
+static void rov_control_loop(rov_move_t *rov_move_control_loop);
+
+
+/**
+  * @brief          set rov control set-point,  movement control value is set by "rov_behaviour_control_set".
+  * @param[out]     rov_move_control: "rov_move_t" valiable point
+  * @retval         none
+  */
+/**
+  * @brief          设置ROV控制设置值, 运动控制值是通过rov_behaviour_control_set函数设置的
+  * @param[out]     rov_move_control:"rov_move_t"变量指针.
+  * @retval         none
+  */
+static void rov_set_contorl(rov_move_t *rov_move_control);
 
 /**
   * @brief          根据上位机下发的遥控器数据，修正角度和速度值

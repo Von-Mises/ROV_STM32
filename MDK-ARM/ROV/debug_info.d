@@ -3,6 +3,9 @@ rov\debug_info.o: ..\application\debug_info.h
 rov\debug_info.o: ..\application\socket_send.h
 rov\debug_info.o: ..\application\protocol\protocol.h
 rov\debug_info.o: ..\application\struct_typedef.h
+rov\debug_info.o: ..\application\comunication.h
+rov\debug_info.o: ..\application\IMU_receive.h
+rov\debug_info.o: ..\components\controller\pid.h
 rov\debug_info.o: D:\Keil5\ARM\ARMCC\Bin\..\include\string.h
 rov\debug_info.o: ../Inc/main.h
 rov\debug_info.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h

@@ -66,11 +66,11 @@ rov\freertos.o: ..\application\struct_typedef.h
 rov\freertos.o: ..\application\water_level_task.h
 rov\freertos.o: ..\application\tem_hum_task.h
 rov\freertos.o: ..\application\socket_send.h
-rov\freertos.o: ..\application\pwm_task.h
-rov\freertos.o: ..\application\rov_movation_task.h
 rov\freertos.o: ..\application\comunication.h
 rov\freertos.o: ..\application\IMU_receive.h
 rov\freertos.o: ..\components\controller\pid.h
+rov\freertos.o: ..\application\pwm_task.h
+rov\freertos.o: ..\application\rov_movation_task.h
 rov\freertos.o: ..\components\algorithm\user_lib.h
 rov\freertos.o: ..\application\parse_task.h
 rov\freertos.o: ..\components\suport\fifo.h

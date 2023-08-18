@@ -30,7 +30,7 @@ static uint16_t adcx_get_chx_value(ADC_HandleTypeDef *ADCx, uint32_t ch)
 }
 
 /**
-	* @brief          初始化AD采样
+	* @brief        初始化AD采样
   * @param[in]      none 
   * @retval         none
   */
@@ -45,12 +45,12 @@ fp32 sampling_cpu_temprate(void)
 {
     uint16_t adcx = 0;
     fp32 temperate;
-		uint16_t TS_CAL1;
-		uint16_t TS_CAL2;
+	uint16_t TS_CAL1;
+	uint16_t TS_CAL2;
     adcx = adcx_get_chx_value(&hadc3, ADC_CHANNEL_TEMPSENSOR);
     TS_CAL1 = *(__IO uint16_t *)(0x1FF1E820);
-		TS_CAL2 = *(__IO uint16_t *)(0x1FF1E840);
-		temperate = ((110.0f - 30.0f) / (TS_CAL2 - TS_CAL1)) * ((adcx/3.3f*2.5f) - TS_CAL1) + 30.0f;
+	TS_CAL2 = *(__IO uint16_t *)(0x1FF1E840);
+	temperate = ((110.0f - 30.0f) / (TS_CAL2 - TS_CAL1)) * ((adcx/3.3f*2.5f) - TS_CAL1) + 30.0f;
 
     return temperate;
 }

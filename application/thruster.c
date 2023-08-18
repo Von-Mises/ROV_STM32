@@ -7,7 +7,7 @@
   * @note       
   * @history
   *  Version    Date            Author          Modification
-  *  V1.0.0     NOV-11-2022     HaoLion(郝亮亮)    1. done
+  *  V1.0.0     NOV-11-2022     Qiqi Li(李琪琪)    1. done
   *
   @verbatim
   ==============================================================================
@@ -48,7 +48,7 @@ static uint8_t              thruster_can_send_data[8];
 		
 /**
   * @brief          预先开启所有电机，否则可能导致第一次下发命令时各个电机出现延迟情况
-	* @param[in]      none
+	* @param[in]    none
   * @retval         none
   */
 void Thruster_Init(void)

@@ -5,7 +5,7 @@
   * @note       
   * @history
   *  Version    Date            Author          Modification
-  *  V1.0.0     DEC-14-2022     HaoLion(郝亮亮)    1. done
+  *  V1.0.0     DEC-14-2022     Qiqi Li(李琪琪)    1. done
   *
   @verbatim
   ==============================================================================
@@ -38,93 +38,6 @@
             (output) = 0;                                \
         }                                                \
     }
-
-/**
-  * @brief          "rov_move" valiable initialization, include pid initialization, remote control data point initialization, 
-  *                  and IMU data point initialization.
-  * @param[out]     rov_move_init: "rov_move_t" valiable point
-  * @retval         none
-  */
-/**
-  * @brief          初始化"rov_move"变量，包括pid初始化， 遥控器指针初始化，IMU数据指针初始化
-  * @param[out]     rov_move_init:"rov_move_t"变量指针.
-  * @retval         none
-  */
-static void rov_init(rov_move_t *rov_move_init);
-
-/**
-  * @brief          set rov control mode, mainly call 'rov_behaviour_mode_set' function
-  * @param[out]     rov_move_mode: "rov_move_t" valiable point
-  * @retval         none
-  */
-/**
-  * @brief          设置ROV控制模式，主要在'rov_behaviour_mode_set'函数中改变
-  * @param[out]     rov_move_mode:"rov_move_t"变量指针.
-  * @retval         none
-  */
-static void rov_set_mode(rov_move_t *rov_move_mode);
-
-/**
-  * @brief          rov motor speed data updata
-  * @param[out]     rov_move_updata: "rov_move_t" valiable point
-  * @retval         none
-  */
-/**
-  * @brief          ROV电机速度更新
-  * @param[out]     rov_move_updata:"rov_move_t"变量指针.
-  * @retval         none
-  */
-static void rov_feedback_update(rov_move_t *rov_move_updata);
-
-/**
-  * @brief          when rov mode change, some param should be changed
-  * @param[out]     rov_move_transit: "rov_move" valiable point
-  * @retval         none
-  */
-/**
-  * @brief          rov模式改变，有些参数需要改变，
-  * @param[out]     rov_move_transit:"rov_move"变量指针.
-  * @retval         none
-  */
-static void rov_mode_change_control_transit(rov_move_t *rov_move_transit);
-
-/**
-  * @brief          set rov pid parameters
-  * @param[out]     none
-  * @retval         none
-  */
-/**
-  * @brief          rov各环PID参数设置
-  * @param[out]     none
-  * @retval         none
-  */
-static void rov_set_pids(rov_move_t *rov_move_pids);
-
-/**
-  * @brief          控制循环，根据控制设定值，计算各环并且输出速度，进行控制
-  * @param[out]     rov_move_control_loop:"rov_move"变量指针.
-  * @retval         none
-  */
-static void rov_control_loop(rov_move_t *rov_move_control_loop);
-
-
-/**
-  * @brief          set rov control set-point,  movement control value is set by "rov_behaviour_control_set".
-  * @param[out]     rov_move_control: "rov_move_t" valiable point
-  * @retval         none
-  */
-/**
-  * @brief          设置ROV控制设置值, 运动控制值是通过rov_behaviour_control_set函数设置的
-  * @param[out]     rov_move_control:"rov_move_t"变量指针.
-  * @retval         none
-  */
-static void rov_set_contorl(rov_move_t *rov_move_control);
-
-
-
-
-
-
 
 //ROV运动数据
 rov_move_t rov_move;
@@ -209,19 +122,26 @@ uint8_t get_rov_mode(void)
 static void rov_set_pids(rov_move_t *rov_move_pids)
 {
 	if(rov_move_pids == NULL) return;
-	get_pids(&rov_move_pids->depth_loop_pid, 0); 			//定深环PID
-	
-	get_pids(&rov_move_pids->track_speed_pid[0], 1);		//履带电机闭环PID
-	get_pids(&rov_move_pids->track_speed_pid[1], 1);		//履带电机闭环PID
-	get_pids(&rov_move_pids->track_turn_loop_pid, 2);		//履带模式转向环PID								                
-	
-	get_pids(&rov_move_pids->yaw_angle_pid, 3);              	//yaw angle PID.Yaw角度pid
-	get_pids(&rov_move_pids->yaw_angular_velocity_pid, 4);      //yaw angular velocity PID.Yaw角速度pid
-//	get_pids(&rov_move_pids->pitch_angle_pid, 5);              	//pitch angle PID.Pitch角度pid
-//	get_pids(&rov_move_pids->pitch_angular_velocity_pid, 6);    //pitch angular velocity PID.Pitch角速度pid
-	get_pids(&rov_move_pids->roll_angle_pid, 7);              	//roll angle PID.Roll角度pid
-	get_pids(&rov_move_pids->roll_angular_velocity_pid, 8);     //roll angular velocity PID.Roll角速度pid
-}
+	if(rov_move_pids->pid_change == 1)
+	{
+		get_pids(&rov_move_pids->depth_loop_pid, 0); 			//定深环PID
+		
+		get_pids(&rov_move_pids->track_speed_pid[0], 1);		//履带电机闭环PID
+		get_pids(&rov_move_pids->track_speed_pid[1], 1);		//履带电机闭环PID
+		get_pids(&rov_move_pids->track_turn_loop_pid, 2);		//履带模式转向环PID								                
+		
+		get_pids(&rov_move_pids->yaw_angle_pid, 3);              	//yaw angle PID.Yaw角度pid
+		get_pids(&rov_move_pids->yaw_angular_velocity_pid, 4);      //yaw angular velocity PID.Yaw角速度pid
+	//	get_pids(&rov_move_pids->pitch_angle_pid, 5);              	//pitch angle PID.Pitch角度pid
+	//	get_pids(&rov_move_pids->pitch_angular_velocity_pid, 6);    //pitch angular velocity PID.Pitch角速度pid
+		get_pids(&rov_move_pids->roll_angle_pid, 7);              	//roll angle PID.Roll角度pid
+		get_pids(&rov_move_pids->roll_angular_velocity_pid, 8);     //roll angular velocity PID.Roll角速度pid
+		
+		rov_move_pids->pid_change = 0;
+	}
+	else return;
+	}
+
 
 /**
   * @brief          rov motor speed data updata
@@ -245,7 +165,7 @@ static void rov_feedback_update(rov_move_t *rov_move_updata)
 	}
 	//获取深度
 	rov_move_updata->depth = get_depth_data();
-
+	
 }
 
 /**
@@ -327,6 +247,10 @@ static void rov_init(rov_move_t *rov_move_init)
 	//get remote pos control point
     //获取位姿控制数据指针
     rov_move_init->rov_Pos_Ctrl = get_pos_ctrl_cmd();
+	
+	//set pid change state to zero
+	//初始化pid更改标志位为0
+	rov_move_init->pid_change = 0;
 	
     //get gyro sensor euler angle point
     //获取陀螺仪姿态角指针
@@ -445,7 +369,7 @@ static void rov_set_contorl(rov_move_t *rov_move_control)
     {
         return;
     }
-
+	rov_move_control->depth_set = rov_move_control->rov_Pos_Ctrl->Depth;
 
     fp32 vf_set = 0.0f, vz_set = 0.0f, yaw_set = 0.0f, pitch_set = 0.0f, roll_set = 0.0f;
     //获取三个控制设置值
@@ -504,7 +428,7 @@ static void rov_set_contorl(rov_move_t *rov_move_control)
   * @param[in]      roll_control_out,: roll轴控制量
   * @param[in]      depth_control_out,: 定深环控制量
 	* @param[in]      vf_control_out,: 艏向控制量
-  * @param[out]     thruster_speed: 六个推进器速度 从0-5分别为左上、右上、左下、右下、左侧、右侧
+  * @param[out]     thruster_speed: 六个推进器速度 从0-5分别为右下、左上、右上、左下、右侧、左侧
   * @retval         none
   */
 static void rov_vector_to_thruster_speed(const fp32 yaw_control_out, const fp32 pitch_control_out, const fp32 roll_control_out,const fp32 depth_control_out,const fp32 vf_control_out , fp32 thruster_speed[6])
@@ -515,18 +439,8 @@ static void rov_vector_to_thruster_speed(const fp32 yaw_control_out, const fp32 
 	thruster_speed[2] = depth_control_out + roll_control_out + pitch_control_out; //右上
 	thruster_speed[3] = depth_control_out - roll_control_out - pitch_control_out; //左下
 	//水平推进器
-	thruster_speed[4] = vf_control_out - THRUSTER_DISTANCE_TO_CENTER*yaw_control_out; //右
-	thruster_speed[5] = vf_control_out + THRUSTER_DISTANCE_TO_CENTER*yaw_control_out; //左
-//	if(rov_move.IMU_data->roll > 80)
-//	{
-//		thruster_speed[1] = 0.5 * depth_control_out - roll_control_out + pitch_control_out; //左上
-//		thruster_speed[3] = 0.5 * depth_control_out - roll_control_out - pitch_control_out; //左下
-//	}else if(rov_move.IMU_data->roll <-80)
-//	{
-//		thruster_speed[0] = 0.5 * depth_control_out + roll_control_out - pitch_control_out; //右下
-//		thruster_speed[2] = 0.5 * depth_control_out + roll_control_out + pitch_control_out; //右上
-//	}
-
+	thruster_speed[4] = vf_control_out - yaw_control_out; //右
+	thruster_speed[5] = vf_control_out + yaw_control_out; //左
 }
 
 /**
