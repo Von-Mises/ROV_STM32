@@ -10,7 +10,7 @@
 
 ## 系统框图
 
-![system](D:\Git_storage\ROV_STM32\doc\image\system.png)
+![system](https://github.com/Von-Mises/ROV_STM32/blob/main/doc/image/communication.png)
 
 ## 结构布局
 
