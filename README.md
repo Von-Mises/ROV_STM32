@@ -10,21 +10,19 @@
 
 ## 系统框图
 
-![image-20230819121938145](C:\Users\Laptop\AppData\Roaming\Typora\typora-user-images\image-20230819121938145.png)
+![system](D:\Git_storage\ROV_STM32\doc\image\system.png)
 
 ## 结构布局
 
-![image-20230819121950417](C:\Users\Laptop\AppData\Roaming\Typora\typora-user-images\image-20230819121950417.png)
+![structure](D:\Git_storage\ROV_STM32\doc\image\structure.png)
 
 ## 供电系统框图
 
-![](D:\Git_storage\SHEN_LONG_ROV_STM32\doc\image\hardware.png)
-
-[](file:///F:/ZJU_gra/SHEN_LONG_DEMO/ROV/doc/a.docx)
+![power_suply](D:\Git_storage\ROV_STM32\doc\image\power_suply.png)
 
 ## 通信系统框图
 
-![image-20230819122020902](C:\Users\Laptop\AppData\Roaming\Typora\typora-user-images\image-20230819122020902.png)
+![communication](D:\Git_storage\ROV_STM32\doc\image\communication.png)
 
 ## 软件环境
 
