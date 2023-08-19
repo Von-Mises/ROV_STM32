@@ -8,6 +8,10 @@
 
 本代码是玄武号下位机控制程序，主控芯片为STM32H743IITx，具有最高480MHz主频。ROV整体布局采用6个推进器，底盘装有2个履带电机。操控采用网络通信发送手柄数据。（2023.8.19更新）
 
+## 样机实物图
+
+![prototype](https://github.com/Von-Mises/ROV_STM32/blob/main/Doc/prototype.jpg)
+
 ## 系统框图
 
 ![system](https://github.com/Von-Mises/ROV_STM32/blob/main/Doc/system.png)
