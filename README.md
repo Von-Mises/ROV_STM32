@@ -10,19 +10,19 @@
 
 ## 系统框图
 
-![system](D:\Git_storage\ROV_STM32\Doc\system.png)
+![system](https://github.com/Von-Mises/ROV_STM32/blob/main/Doc/system.png)
 
 ## 结构布局
 
-![structure](D:\Git_storage\ROV_STM32\Doc\structure.png)
+![structure](https://github.com/Von-Mises/ROV_STM32/blob/main/Doc/structure.png)
 
 ## 供电系统框图
 
-![power_suply](D:\Git_storage\ROV_STM32\Doc\power_suply.png)
+![power_suply](https://github.com/Von-Mises/ROV_STM32/blob/main/Doc/power_suply.png)
 
 ## 通信系统框图
 
-![communication](D:\Git_storage\ROV_STM32\Doc\communication.png)
+![communication](https://github.com/Von-Mises/ROV_STM32/blob/main/Doc/communication.png)
 
 ## 软件环境
 
