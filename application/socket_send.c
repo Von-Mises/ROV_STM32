@@ -230,10 +230,18 @@ static void rov_status_update(ext_rov_status_t *rov_status_updata)
 	get_crawler_motor_speed(&motor_speed_1, &motor_speed_2);
 	rov_status_updata->motors_status.track_speed[0] = motor_speed_1;
 	rov_status_updata->motors_status.track_speed[1] = motor_speed_2;
-	for(int i=0;i<6;i++)
-	{
-		rov_status_updata->motors_status.thruster_speed[i] = get_thruster_measure_point(i)->speed_rpm;
-	}
+//	for(int i=0;i<6;i++)
+//	{
+//		rov_status_updata->motors_status.thruster_speed[i] = get_thruster_measure_point(i)->speed_rpm;
+//	}
+	//这里做推进器转速的映射更改，按照协议左上、右上、左下、右下、左侧、右侧推进器顺序存入数组
+	rov_status_updata->motors_status.thruster_speed[0] = get_thruster_measure_point(1)->speed_rpm;
+	rov_status_updata->motors_status.thruster_speed[1] = get_thruster_measure_point(2)->speed_rpm;
+	rov_status_updata->motors_status.thruster_speed[2] = get_thruster_measure_point(3)->speed_rpm;
+	rov_status_updata->motors_status.thruster_speed[3] = get_thruster_measure_point(0)->speed_rpm;
+	rov_status_updata->motors_status.thruster_speed[4] = get_thruster_measure_point(5)->speed_rpm;
+	rov_status_updata->motors_status.thruster_speed[5] = get_thruster_measure_point(4)->speed_rpm;
+	
 	rov_status_updata->cabin_status.cabin_temperature = get_cabin_temperature();
 	rov_status_updata->cabin_status.cabin_humidity = get_cabin_humidity();
 	rov_status_updata->cabin_status.cabin_water_level = get_water_level_percentage();
