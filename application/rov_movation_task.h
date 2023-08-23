@@ -20,7 +20,6 @@
 #include "comunication.h"
 #include "user_lib.h"
 
-
 //in the beginning of task ,wait a time
 //任务开始空闲一段时间
 #define ROV_TASK_INIT_TIME 357
@@ -41,15 +40,6 @@
 
 //履带模式下，遥控器的yaw遥杆转变为旋转速度的比例
 #define ROV_ANGLE_TO_WZ_SEN  5//0.002f
-
-
-
-//rov forward or back max speed
-//rov运动过程最大航行速度
-#define NORMAL_MAX_ROV_SPEED_F 2.0f
-//rov rise or sink max speed
-//rov运动过程最大沉浮速度
-#define NORMAL_MAX_ROV_SPEED_Z 1.5f
 
 //水平推进器到ROV中心的虚拟距离 单位m
 #define THRUSTER_DISTANCE_TO_CENTER  0.3f
@@ -86,7 +76,7 @@
 #define ROV_YAW_ANGLE_PID_KP 1000.0f
 #define ROV_YAW_ANGLE_PID_KI 0.0f
 #define ROV_YAW_ANGLE_PID_KD 0.0f
-#define ROV_YAW_ANGLE_PID_MAX_OUT 1000.0f
+#define ROV_YAW_ANGLE_PID_MAX_OUT 2000.0f
 #define ROV_YAW_ANGLE_PID_MAX_IOUT 0.2f
 
 //yaw angular velocity PID
@@ -131,32 +121,34 @@
 
 
 /* ----------------------- Data Struct ------------------------------------- */
-
 typedef enum
 {
-	Raw_Mode,                 			//速度直接开环发送
-	Swiming_Mode,										//ROV正常浮游模式，不用履带
-    Crawing_Mode,										//履带爬行模式，此时主要控制vf和yaw
-    No_Move_Mode,										//停止模式，此时机器人稳定当前状态，进行作业（暂不开发）
-} rov_mode_e;
-
+  ROV_ZERO_FORCE,                   		//直接发送速度为0，ROV无力, 跟没上电那样
+  ROV_OPEN,                          		//遥控器的值乘以比例成电流值 直接发送到can总线上
+  ROV_ONLY_ALTHOLD,   						//只开启定深模式
+  ROV_ONLY_ATTHOLD,							//只开启稳姿模式
+  ROV_NORMAL,  								//ROV正常浮游模式，开启定深和稳姿
+  ROV_STICK_WALL,                           //贴壁模式，保持推进器贴紧利用履带
+  ROV_CRAWLING,                        	    //陆地爬行模式
+  ROV_NO_MOVE                      			//停止模式，此时机器人稳定当前状态，进行作业（暂不开发）
+} rov_mode_t;
 
 typedef struct
 {
     const ext_control_cmd_t *rov_Ctrl;             	//ROV使用的控制指针, the point to remote control
     const ext_control_pos_t *rov_Pos_Ctrl;                 //ROV使用的位姿控制指针， the point to pos control
     const IMU_data_t *IMU_data;             				//the point to the euler angle of gyro sensor.获取陀螺仪解算出的欧拉角指针
-    rov_mode_e rov_mode;               							//state machine. ROV控制状态机
-    rov_mode_e last_rov_mode;          							//last state machine.ROV上次控制状态机
+    rov_mode_t rov_mode;               							//state machine. ROV控制状态机
     motors_status_t motor_rov;          						//rov motor data.ROV电机数据
 	
 	int16_t thruster_speed_set[6];									//设定的推进器转速
-	int16_t track_voltage_set[2];										//设定的履带电机电压
+	int16_t track_voltage_set[2];									//设定的履带电机电压
 
 	fp32 depth;																		//深度数据
 	fp32 depth_set;																	//设定的深度值
 	fp32 yaw_angle_set;																//设定的定艏角度
 	uint8_t pid_change;																//pid更改标志位
+	
 	pid_type_def depth_loop_pid;										//定深环PID
 	
 	pid_type_def track_speed_pid[2];								//履带电机闭环PID
@@ -169,23 +161,13 @@ typedef struct
 	pid_type_def roll_angle_pid;              			//roll angle PID.Roll角度pid
 	pid_type_def roll_angular_velocity_pid;         //roll angular velocity PID.Roll角速度pid
 	
-    first_order_filter_type_t rov_cmd_slow_set_yaw;  //use first order filter to slow set-point.使用一阶低通滤波减缓设定值
-    first_order_filter_type_t rov_cmd_slow_set_roll;  //use first order filter to slow set-point.使用一阶低通滤波减缓设定值
-	
-	
 	fp32 vf_set;                      //rov forward speed, positive means forward,unit m/s. rov游动速度 航行方向 前为正
 	fp32 vz_set;                      //rov vertical speed, positive means forward,unit m/s. rov游动速度 深度方向 上浮为正
-	fp32 vf_crawl_set;								//track forward speed ,positive means forward,unit m/s. rov履带速度  前为正
-	fp32 wz_set;											//rov rotation speed in crawl mode, positive means counterclockwise,unit rad/s.ROV履带模式下旋转角速度，逆时针为正 单位 rad/s
+	fp32 vf_crawl_set;				  //track forward speed ,positive means forward,unit m/s. rov履带速度 前为正
+	fp32 wz_set;					  //rov rotation speed in crawl mode, positive means counterclockwise,unit rad/s.ROV履带模式下旋转角速度，逆时针为正，单位 rad/s
 	fp32 yaw_set;                     //rov set Euler angle,unit °.rov的yaw轴设定角度，单位 °
 	fp32 pitch_set;                   //rov set Euler angle,unit °.rov的pitch轴设定角度，单位 °
 	fp32 roll_set;                    //rov set Euler angle,unit °.rov的roll轴设定角度，单位 °
-	
-
-  fp32 vf_max_speed;  //max forward speed, unit m/s.航行方向最大速度 单位m/s
-  fp32 vf_min_speed;  //max backward speed, unit m/s.后退方向最大速度 单位m/s
-  fp32 vz_max_speed;  //max letf speed, unit m/s.上升方向最大速度 单位m/s
-  fp32 vz_min_speed;  //max right speed, unit m/s.下沉方向最大速度 单位m/s
 
 } rov_move_t;
 
@@ -231,18 +213,6 @@ static void rov_set_mode(rov_move_t *rov_move_mode);
 static void rov_feedback_update(rov_move_t *rov_move_updata);
 
 /**
-  * @brief          when rov mode change, some param should be changed
-  * @param[out]     rov_move_transit: "rov_move" valiable point
-  * @retval         none
-  */
-/**
-  * @brief          rov模式改变，有些参数需要改变，
-  * @param[out]     rov_move_transit:"rov_move"变量指针.
-  * @retval         none
-  */
-static void rov_mode_change_control_transit(rov_move_t *rov_move_transit);
-
-/**
   * @brief          set rov pid parameters
   * @param[out]     none
   * @retval         none
@@ -275,18 +245,8 @@ static void rov_control_loop(rov_move_t *rov_move_control_loop);
 static void rov_set_contorl(rov_move_t *rov_move_control);
 
 /**
-  * @brief          根据上位机下发的遥控器数据，修正角度和速度值
-  *                 
-  * @param[in]      yaw_set yaw轴稳定的角度
-  * @param[in]      roll_set roll轴稳定的角度
-  * @param[out]     rov_move_transit:"rov_move"变量指针.
-  * @retval         none
-  */
-extern void rov_rc_to_control_vector(fp32 *yaw_set, fp32 *roll_set, rov_move_t *rov_move_rc_to_vector);
-
-/**
   * @brief          返回ROV控制模式
-  * @param[in]     none
+  * @param[in]      none
   * @retval         uint8_t
   */
 extern uint8_t get_rov_mode(void);

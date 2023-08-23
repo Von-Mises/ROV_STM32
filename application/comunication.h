@@ -92,7 +92,7 @@ typedef __packed struct
 typedef __packed struct
 {
 	float Depth;
-//	float Yaw;
+	float Yaw;
 //	float Roll;
 //	float Pitch;
 } ext_control_pos_t;

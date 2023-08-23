@@ -68,9 +68,6 @@ void rov_movation_task(void const *pvParameters)
         //set rov control mode
         //设置ROV控制模式
         rov_set_mode(&rov_move);
-        //when mode changes, some data save
-        //模式切换数据保存
-        rov_mode_change_control_transit(&rov_move);
         //rov movation data update
         //ROV运动数据更新
         rov_feedback_update(&rov_move);
@@ -165,7 +162,6 @@ static void rov_feedback_update(rov_move_t *rov_move_updata)
 	}
 	//获取深度
 	rov_move_updata->depth = get_depth_data();
-	
 }
 
 /**
@@ -213,7 +209,7 @@ static void rov_init(rov_move_t *rov_move_init)
 	//roll angle PID
 	//Roll角度pid
 	const static fp32 rov_roll_pid[3] = {ROV_ROLL_ANGLE_PID_KP, ROV_ROLL_ANGLE_PID_KI, ROV_ROLL_ANGLE_PID_KD};
-		//initialize PID
+	//initialize PID
     //初始化PID
 	for (i = 0; i < 2; i++)
     {
@@ -233,13 +229,15 @@ static void rov_init(rov_move_t *rov_move_init)
 	//roll
 	PID_init(&rov_move_init->roll_angular_velocity_pid, PID_DELTA, rov_roll_w_pid, ROV_ROLL_ANGULAR_VELOCITY_PID_MAX_OUT, ROV_ROLL_ANGULAR_VELOCITY_PID_MAX_IOUT);
 	PID_init(&rov_move_init->roll_angle_pid, PID_POSITION, rov_roll_pid, ROV_ROLL_ANGLE_PID_MAX_OUT, ROV_ROLL_ANGLE_PID_MAX_IOUT);
-		
-    const static fp32 rov_yaw_order_filter[1] = {ROV_ACCEL_YAW_NUM};
-    const static fp32 rov_roll_order_filter[1] = {ROV_ACCEL_ROL_NUM};
 
     //in beginning， rov mode is normal 
     //rov开机状态为正常
-    rov_move_init->rov_mode = Raw_Mode;
+    rov_move_init->rov_mode = ROV_ZERO_FORCE;
+	
+	//set pid change state to zero
+	//初始化pid更改标志位为0
+	rov_move_init->pid_change = 0;
+	
     //get remote control point
     //获取控制数据指针
     rov_move_init->rov_Ctrl = get_ctrl_cmd();
@@ -248,26 +246,9 @@ static void rov_init(rov_move_t *rov_move_init)
     //获取位姿控制数据指针
     rov_move_init->rov_Pos_Ctrl = get_pos_ctrl_cmd();
 	
-	//set pid change state to zero
-	//初始化pid更改标志位为0
-	rov_move_init->pid_change = 0;
-	
     //get gyro sensor euler angle point
     //获取陀螺仪姿态角指针
     rov_move_init->IMU_data = get_imu_data_point();
-		
-    //first order low-pass filter  replace ramp function
-    //用一阶滤波代替斜波函数生成
-    first_order_filter_init(&rov_move_init->rov_cmd_slow_set_yaw, ROV_CONTROL_TIME, rov_yaw_order_filter);
-    first_order_filter_init(&rov_move_init->rov_cmd_slow_set_roll, ROV_CONTROL_TIME, rov_roll_order_filter);
-
-    //max and min speed
-    //最大 最小速度
-    rov_move_init->vf_max_speed = NORMAL_MAX_ROV_SPEED_F;
-    rov_move_init->vf_min_speed = -NORMAL_MAX_ROV_SPEED_F;
-
-    rov_move_init->vz_max_speed = NORMAL_MAX_ROV_SPEED_Z;
-    rov_move_init->vz_min_speed = -NORMAL_MAX_ROV_SPEED_Z;
 
     //update data
     //更新一下数据
@@ -290,67 +271,8 @@ static void rov_set_mode(rov_move_t *rov_move_mode)
     {
         return;
     }
-    //in file "rov_behaviour.c"
-    rov_behaviour_mode_set(rov_move_mode);
+    rov_move_mode->rov_mode = rov_move_mode->rov_Ctrl->Mode;
 }
-
-/**
-  * @brief          when rov mode change, some param should be changed
-  * @param[out]     rov_move_transit: "rov_move" valiable point
-  * @retval         none
-  */
-/**
-  * @brief          rov模式改变，有些参数需要改变，
-  * @param[out]     rov_move_transit:"rov_move"变量指针.
-  * @retval         none
-  */
-static void rov_mode_change_control_transit(rov_move_t *rov_move_transit)
-{
-    if (rov_move_transit == NULL)
-    {
-        return;
-    }
-
-    if (rov_move_transit->last_rov_mode == rov_move_transit->rov_mode)
-    {
-        return;
-    }
-	
-    rov_move_transit->last_rov_mode = rov_move_transit->rov_mode;
-}
-
-
-/**
-  * @brief          根据上位机下发的遥控器数据，修正角度和速度值
-  *                 
-  * @param[in]      yaw_set yaw轴稳定的角度
-  * @param[in]      roll_set roll轴稳定的角度
-  * @param[out]     rov_move_transit:"rov_move"变量指针.
-  * @retval         none
-  */
-void rov_rc_to_control_vector(fp32 *yaw_set, fp32 *roll_set, rov_move_t *rov_move_rc_to_vector)
-{
-    if (rov_move_rc_to_vector == NULL || yaw_set == NULL || roll_set == NULL)
-    {
-        return;
-    }
-    
-    fp32 yaw_channel, roll_channel;
-    //deadline, because some remote control need be calibrated,  the value of rocker is not zero in middle place,
-    //死区限制，因为遥控器可能存在差异 摇杆在中间，其值不为0
-    rc_deadband_limit(rov_move_rc_to_vector->rov_Ctrl->YAW, yaw_channel, ROV_RC_DEADLINE);
-    rc_deadband_limit(rov_move_rc_to_vector->rov_Ctrl->ROL, roll_channel, ROV_RC_DEADLINE);
-
-
-    //first order low-pass replace ramp function, calculate chassis speed set-point to improve control performance
-    //一阶低通滤波代替斜波作为底盘速度输入
-    first_order_filter_cali(&rov_move_rc_to_vector->rov_cmd_slow_set_yaw, yaw_channel);
-    first_order_filter_cali(&rov_move_rc_to_vector->rov_cmd_slow_set_roll, roll_channel);
-    
-    *yaw_set = rov_move_rc_to_vector->rov_cmd_slow_set_yaw.out;
-    *roll_set = rov_move_rc_to_vector->rov_cmd_slow_set_roll.out;
-}
-
 
 /**
   * @brief          set rov control set-point,  movement control value is set by "rov_behaviour_control_set".
@@ -370,45 +292,43 @@ static void rov_set_contorl(rov_move_t *rov_move_control)
         return;
     }
 	rov_move_control->depth_set = rov_move_control->rov_Pos_Ctrl->Depth;
-
-    fp32 vf_set = 0.0f, vz_set = 0.0f, yaw_set = 0.0f, pitch_set = 0.0f, roll_set = 0.0f;
-    //获取三个控制设置值
-    rov_behaviour_control_set(&vf_set, &vz_set, &yaw_set, &pitch_set, &roll_set, rov_move_control);
+	rov_move_control->yaw_angle_set = rov_move_control->rov_Pos_Ctrl->Yaw;
 
     //根据控制模式，给ROV配置实际速度
-    if (rov_move_control->rov_mode == Raw_Mode)
+    if (rov_move_control->rov_mode == ROV_OPEN)
     {
-		rov_move_control->vf_set = vf_set;
-		rov_move_control->vz_set = vz_set;
-		rov_move_control->yaw_set = yaw_set;
-		rov_move_control->roll_set = roll_set;
-		rov_move_control->pitch_set = pitch_set;
+		rov_move_control->vf_set = rov_move_control->rov_Ctrl->VF;
+		rov_move_control->vz_set = rov_move_control->rov_Ctrl->VZ;
+		rov_move_control->yaw_set = rov_move_control->rov_Ctrl->YAW;
+		rov_move_control->roll_set = rov_move_control->rov_Ctrl->ROL;
+		rov_move_control->pitch_set = 0;//rov_move_control->rov_Ctrl->PIT;
 		rov_move_control->vf_crawl_set = 0.0f;
 		rov_move_control->wz_set = 0.0f;
 				
     }
-    else if (rov_move_control->rov_mode == Swiming_Mode)
+    else if (rov_move_control->rov_mode == ROV_NORMAL || rov_move_control->rov_mode == ROV_ONLY_ALTHOLD
+		     || rov_move_control->rov_mode == ROV_ONLY_ATTHOLD)
     {
-		rov_move_control->vf_set = vf_set;
-		rov_move_control->vz_set = vz_set;
-		rov_move_control->yaw_set = yaw_set;
-		rov_move_control->roll_set = roll_set;
-		rov_move_control->pitch_set = pitch_set;
+		rov_move_control->vf_set = rov_move_control->rov_Ctrl->VF;
+		rov_move_control->vz_set = rov_move_control->rov_Ctrl->VZ;
+		rov_move_control->yaw_set = rov_move_control->rov_Ctrl->YAW;
+		rov_move_control->roll_set = rov_move_control->rov_Ctrl->ROL;
+		rov_move_control->pitch_set = 0;//rov_move_control->rov_Ctrl->PIT;
 		rov_move_control->vf_crawl_set = 0.0f;
 		rov_move_control->wz_set = 0.0f;
     }
-    else if (rov_move_control->rov_mode == Crawing_Mode)
+    else if (rov_move_control->rov_mode == ROV_CRAWLING || rov_move_control->rov_mode == ROV_STICK_WALL)
     {
 		rov_move_control->vf_set = 0.0f;
-		rov_move_control->vz_set = vz_set;
+		rov_move_control->vz_set = rov_move_control->rov_Ctrl->VZ;
 		rov_move_control->yaw_set = 0.0f;
 		rov_move_control->roll_set = 0.0f;
 		rov_move_control->pitch_set = 0.0f;
-		rov_move_control->vf_crawl_set = vf_set;
+		rov_move_control->vf_crawl_set = rov_move_control->rov_Ctrl->VF;
 		//手柄下发的角度值变为履带旋转角速度
-		rov_move_control->wz_set = yaw_set*ROV_ANGLE_TO_WZ_SEN;
+		rov_move_control->wz_set = rov_move_control->rov_Ctrl->YAW;
     }
-    else if (rov_move_control->rov_mode == No_Move_Mode)
+    else if (rov_move_control->rov_mode == ROV_NO_MOVE || rov_move_control->rov_mode == ROV_ZERO_FORCE)
     {
 		rov_move_control->vf_set = 0.0f;
 		rov_move_control->vz_set = 0.0f;

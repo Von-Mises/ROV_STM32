@@ -203,7 +203,6 @@ static uint16_t msg_consume()
 		queue_data_t *queue_data;
 		queue_data = (queue_data_t *)address;
 		tcp_len = send_data_pack(TEXT_MSG_ID,queue_data->pdata,queue_data->len);
-//		printf("queue data:%s\r\n",queue_data->data);
 		vPortFree(queue_data);
 		return tcp_len;
 	}
@@ -282,7 +281,6 @@ static uint16_t rov_send_status(void)
 int socket_printf(char* format, ...)
 {
 	char str_tmp[REC_TEXT_MAX_SIZE] = {0};
-//	memset(str_tmp, 0, sizeof(str_tmp));
 	uint8_t len = 0;
 	va_list arg;
 	va_start(arg, format);
