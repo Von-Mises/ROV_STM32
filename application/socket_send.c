@@ -139,7 +139,7 @@ void server_send_task(void const * argument)
 			rov_status_update(&tcp_rov_status);
 			send_data_len = rov_send_status();
 			if(write(connected,send_data,send_data_len) < 0) break;
-			osDelay(100);
+			osDelay(50);
 		}
 		/*客户端消息发送失败，断开连接*/
 		if (connected >= 0) closesocket(connected);
