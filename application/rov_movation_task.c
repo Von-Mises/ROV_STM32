@@ -92,6 +92,13 @@ void rov_movation_task(void const *pvParameters)
 		//os delay
         //系统延时
         osDelay(ROV_CONTROL_TIME_MS);
+		
+		//定深、定艏模式下，重新设置定深深度和定艏角度
+//		if(rov_move.rov_mode == ROV_ONLY_ALTHOLD || rov_move.rov_mode == ROV_ONLY_ATTHOLD || rov_move.rov_mode == ROV_NORMAL)
+//		{
+//			rov_move.depth_set = get_depth_data();
+//			rov_move.yaw_angle_set = get_imu_data_point()->yaw;
+//		}
     }
 }
 
@@ -320,7 +327,11 @@ static void rov_set_contorl(rov_move_t *rov_move_control)
     else if (rov_move_control->rov_mode == ROV_CRAWLING || rov_move_control->rov_mode == ROV_STICK_WALL)
     {
 		rov_move_control->vf_set = 0.0f;
-		rov_move_control->vz_set = rov_move_control->rov_Ctrl->VZ;
+		rov_move_control->vz_set = 0.0f;
+		if(rov_move_control->rov_mode == ROV_STICK_WALL)
+		{
+			rov_move_control->vz_set = 150;
+		}
 		rov_move_control->yaw_set = 0.0f;
 		rov_move_control->roll_set = 0.0f;
 		rov_move_control->pitch_set = 0.0f;
@@ -366,7 +377,7 @@ static void rov_vector_to_thruster_speed(const fp32 yaw_control_out, const fp32 
 /**
   * @brief          根据控制解算两个履带电机输出速度
   * @param[in]      track_wz_out,: 旋转速度控制量
-	* @param[in]      track_vf_control_out,: 前进控制量
+  * @param[in]      track_vf_control_out,: 前进控制量
   * @param[out]     track_speed: 履带速度 分别为左侧、右侧
   * @retval         none
   */

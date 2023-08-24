@@ -50,24 +50,12 @@
 #include "cmsis_os.h"
 #include "arm_math.h"
 #include "socket_send.h"
+#include "depth_meter_receive.h"
 
 //highlight, the variable rov control 
 //留意，这个rov控制变量
 extern rov_move_t rov_move;
 rov_mode_t *rov_mode = &rov_move.rov_mode;
-
-#define Over_Zero_Handlle(tar, cur, Half_T)        			 \
-    {                                                    \
-        if ((tar)-(cur) > (2)*(Half_T)) 								 \
-        {                                                \
-            (cur) += (Half_T);                           \
-        }                                                \
-        else if ((tar)-(cur) < (-2)*(Half_T))            \
-        {                                                \
-            (cur) -= (Half_T);                           \
-        }                                                \
-    }
-
 
 /**
   * @brief          返回ROV行为
@@ -90,22 +78,38 @@ uint8_t get_rov_behaviour(void)
 
 void rov_angle_loop_calc(fp32 *yaw_control_out, fp32 *pitch_control_out, fp32 *roll_control_out, rov_move_t * rov_loop_calc)
 {
-	if(rov_loop_calc->rov_mode == ROV_NORMAL || rov_loop_calc->rov_mode == ROV_ONLY_ATTHOLD)
+	fp32 cur_yaw_set = rov_loop_calc->yaw_set;
+	
+	if(rov_loop_calc->rov_mode == ROV_ONLY_ATTHOLD || rov_loop_calc->rov_mode == ROV_NORMAL)
 	{
-		fp32 yaw_cur = 0.0f;
-		fp32 yaw_tar= 0.0f;
 		//获取当前值
-		yaw_cur = rov_loop_calc->IMU_data->yaw;
+		fp32 yaw_cur = rov_loop_calc->IMU_data->yaw;
 		//获取目标值
-		yaw_tar = rov_loop_calc->yaw_angle_set;
-		if(yaw_tar == 360) yaw_cur = 360;
+		fp32 yaw_tar = rov_loop_calc->yaw_angle_set;
+		//如果推杆速度过小，则进入定艏环计算，否则开环发送
+		if(cur_yaw_set <= ROV_YAW_HOLD_DEADLINE && cur_yaw_set >= -ROV_YAW_HOLD_DEADLINE)
+		{
+			if(yaw_tar == 360) yaw_cur = 360;
+			else
+			{
+				if(yaw_tar - yaw_cur > 180) yaw_cur += 360;
+				else if(yaw_tar - yaw_cur < -180) yaw_cur -= 360;
+			}
+			*yaw_control_out = PID_calc(&rov_loop_calc->depth_loop_pid, yaw_cur, yaw_tar);
+		}
+		//当推杆速度超过死区时，重新调整目标艏向
 		else
 		{
-			if(yaw_tar - yaw_cur > 180) yaw_cur += 360;
-			else if(yaw_tar - yaw_cur < -180) yaw_cur -= 360;
+			*yaw_control_out = cur_yaw_set*ROV_OPEN_YAW_SCALE;
 		}
-		//计算角度环（外环）
-		*yaw_control_out = PID_calc(&rov_loop_calc->yaw_angle_pid, yaw_cur, yaw_tar);
+//		if(yaw_tar == 360) yaw_cur = 360;
+//		else
+//		{
+//			if(yaw_tar - yaw_cur > 180) yaw_cur += 360;
+//			else if(yaw_tar - yaw_cur < -180) yaw_cur -= 360;
+//		}
+//		//计算角度环（外环）
+//		*yaw_control_out = PID_calc(&rov_loop_calc->yaw_angle_pid, yaw_cur, yaw_tar);
 	}
 	else
 	{
@@ -156,54 +160,55 @@ void rov_angle_loop_calc(fp32 *yaw_control_out, fp32 *pitch_control_out, fp32 *r
 
 void rov_depth_loop_calc(fp32 *depth_control_out, rov_move_t * rov_loop_calc)
 {
-	static fp32 last_vz_set = 0; 
 	fp32 cur_vz_set = rov_loop_calc->vz_set;
 	if(rov_loop_calc->rov_mode == ROV_ONLY_ALTHOLD || rov_loop_calc->rov_mode == ROV_NORMAL)
 	{
-//		//当推杆进入稳定区时候，重新设置定深值
-//		if((last_vz_set > ROV_DEPTH_HOLD_DEADLINE && cur_vz_set <= ROV_DEPTH_HOLD_DEADLINE ) 
-//			|| (last_vz_set < -ROV_DEPTH_HOLD_DEADLINE && cur_vz_set >= -ROV_DEPTH_HOLD_DEADLINE))
-//		{
-//			rov_loop_calc->depth_set = rov_loop_calc->depth;
-//		}
-//		//如果推杆速度过小，则进入定深环计算，否则开环发送
-//		if(cur_vz_set <= ROV_DEPTH_HOLD_DEADLINE && cur_vz_set >= -ROV_DEPTH_HOLD_DEADLINE)
-//		{
-//			*depth_control_out = PID_calc(&rov_loop_calc->depth_loop_pid, rov_loop_calc->depth, rov_loop_calc->depth_set);
-//		}
-//		else
-//		{
-//			*depth_control_out = cur_vz_set*ROV_OPEN_VELOCITY_SCALE;
-//		}
 		//获取当前值
 		fp32 depth_cur = rov_loop_calc->depth;
 		//获取目标值
 		fp32 depth_tar = rov_loop_calc->depth_set;
-		//计算深度环
-		*depth_control_out = PID_calc(&rov_loop_calc->depth_loop_pid, depth_cur, depth_tar);
+		//如果推杆速度过小，则进入定深环计算，否则开环发送
+		if(cur_vz_set <= ROV_DEPTH_HOLD_DEADLINE && cur_vz_set >= -ROV_DEPTH_HOLD_DEADLINE)
+		{
+			*depth_control_out = PID_calc(&rov_loop_calc->depth_loop_pid, depth_cur, depth_tar);
+		}
+		//当推杆速度超过死区时，重新调整目标深度
+		else
+		{
+			*depth_control_out = cur_vz_set*ROV_OPEN_HEAVE_SCALE;
+		}
+//		//获取当前值
+//		fp32 depth_cur = rov_loop_calc->depth;
+//		//获取目标值
+//		fp32 depth_tar = rov_loop_calc->depth_set;
+//		//计算深度环
+//		*depth_control_out = PID_calc(&rov_loop_calc->depth_loop_pid, depth_cur, depth_tar);
 	}
 	else
 	{
 //		*depth_control_out = cur_vz_set*ROV_OPEN_VELOCITY_SCALE;
-		
-		uint16_t half_max_thr_heave_set = ROV_MAX_THR_HEAVE_SET * 15 / 2;
-		uint16_t half_max_heave_set = ROV_MAX_THR_HEAVE_SET / 2;
-		if(cur_vz_set> half_max_heave_set)
+		if(rov_loop_calc->rov_mode == ROV_STICK_WALL)
 		{
-			*depth_control_out = 2 * half_max_thr_heave_set;
+			*depth_control_out = 2400;
 		}
-		else if(cur_vz_set >= -half_max_heave_set && rov_loop_calc->yaw_set <= half_max_heave_set)
+		else
 		{
-			*depth_control_out = 0;
+			uint16_t half_max_thr_heave_set = ROV_MAX_THR_HEAVE_SET * 1000 / 2;
+			uint16_t half_max_heave_set = ROV_MAX_THR_HEAVE_SET / 2;
+			if(cur_vz_set> half_max_heave_set)
+			{
+				*depth_control_out = 2 * half_max_thr_heave_set;
+			}
+			else if(cur_vz_set >= -half_max_heave_set && rov_loop_calc->yaw_set <= half_max_heave_set)
+			{
+				*depth_control_out = 0;
+			}
+			else if(cur_vz_set < -half_max_heave_set)
+			{
+				*depth_control_out = -2 * half_max_thr_heave_set;
+			}
 		}
-		else if(cur_vz_set < -half_max_heave_set)
-		{
-			*depth_control_out = -2 * half_max_thr_heave_set;
-		}
-		
-
 	}
-		last_vz_set = cur_vz_set;
 }
 
 /**
@@ -263,7 +268,7 @@ void rov_vf_control_calc(fp32 *vf_control_out, fp32 *track_vf_control_out, rov_m
 	}
 	
 //	*vf_control_out = rov_loop_calc->vf_set * ROV_OPEN_VELOCITY_SCALE;
-	uint16_t half_thr_max_forward_set = ROV_MAX_THR_FORWARD_SET * ROV_OPEN_VELOCITY_SCALE / 2;
+	uint16_t half_thr_max_forward_set = ROV_MAX_THR_FORWARD_SET * ROV_OPEN_FORWAD_SCALE / 2;
 	if(rov_loop_calc->vf_set > ROV_MAX_THR_FORWARD_SET / 2)
 	{
 		*vf_control_out = 2 * half_thr_max_forward_set;

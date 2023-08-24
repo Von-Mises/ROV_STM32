@@ -182,11 +182,6 @@
           <WinNumber>2</WinNumber>
           <ItemText>rov_move,0x0A</ItemText>
         </Ww>
-        <Ww>
-          <count>2</count>
-          <WinNumber>2</WinNumber>
-          <ItemText>rov_move.thruster_speed_set[i]</ItemText>
-        </Ww>
       </WatchWindow2>
       <MemoryWindow1>
         <Mm>
@@ -270,7 +265,7 @@
 
   <Group>
     <GroupName>applications</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1354,7 +1349,7 @@
 
   <Group>
     <GroupName>controller</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>

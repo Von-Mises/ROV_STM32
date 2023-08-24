@@ -121,7 +121,6 @@ const IMU_data_t *get_imu_data_point(void)
     return &imu_data;
 }
 
-
 /**
   * @brief This function handles USART3 global interrupt.
   */

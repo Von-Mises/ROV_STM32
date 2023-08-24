@@ -3,7 +3,7 @@
 <title>Static Call Graph - [ROV\ROV.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image ROV\ROV.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Wed Aug 23 12:34:15 2023
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Wed Aug 23 17:43:56 2023
 <BR><P>
 <H3>Maximum Stack Usage =        768 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -732,6 +732,7 @@ Global Symbols
 <P><STRONG><a name="[12a]"></a>__aeabi_memclr4</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memseta.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[32b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rov_control_loop
 <LI><a href="#[23b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;socket_printf
+<LI><a href="#[128]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_ADC_MspInit
 <LI><a href="#[1f3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_TIM8_Init
 <LI><a href="#[1e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_GPIO_Init
 <LI><a href="#[1dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_DAC1_Init
@@ -747,7 +748,6 @@ Global Symbols
 <LI><a href="#[16f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_I2C_MspInit
 <LI><a href="#[16a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_FDCAN_MspInit
 <LI><a href="#[139]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DAC_MspInit
-<LI><a href="#[128]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_ADC_MspInit
 <LI><a href="#[34d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sys_thread_new
 <LI><a href="#[353]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;tcp_alloc
 <LI><a href="#[27e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ip_reass_enqueue_new_datagram
@@ -1120,6 +1120,7 @@ Global Symbols
 </UL>
 <P><STRONG><a name="[12d]"></a>Error_Handler</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, main.o(i.Error_Handler))
 <BR><BR>[Called By]<UL><LI><a href="#[22a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adcx_get_chx_value
+<LI><a href="#[128]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_ADC_MspInit
 <LI><a href="#[1f9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_USART6_UART_Init
 <LI><a href="#[1f8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_USART3_UART_Init
 <LI><a href="#[1f7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_USART1_UART_Init
@@ -1141,7 +1142,6 @@ Global Symbols
 <LI><a href="#[259]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;low_level_init
 <LI><a href="#[16f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_I2C_MspInit
 <LI><a href="#[139]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DAC_MspInit
-<LI><a href="#[128]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_ADC_MspInit
 </UL>
 
 <P><STRONG><a name="[22]"></a>FDCAN1_IT0_IRQHandler</STRONG> (Thumb, 10 bytes, Stack size 8 bytes, stm32h7xx_it.o(i.FDCAN1_IT0_IRQHandler))
@@ -1357,10 +1357,10 @@ Global Symbols
 <LI><a href="#[13e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DMA_CalcDMAMUXChannelBaseAndMask
 <LI><a href="#[13d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DMA_CalcBaseAndBitshift
 </UL>
-<BR>[Called By]<UL><LI><a href="#[1b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_MspInit
+<BR>[Called By]<UL><LI><a href="#[128]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_ADC_MspInit
+<LI><a href="#[1b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_MspInit
 <LI><a href="#[16f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_I2C_MspInit
 <LI><a href="#[139]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DAC_MspInit
-<LI><a href="#[128]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_ADC_MspInit
 </UL>
 
 <P><STRONG><a name="[13b]"></a>HAL_DMA_Start_IT</STRONG> (Thumb, 738 bytes, Stack size 24 bytes, stm32h7xx_hal_dma.o(i.HAL_DMA_Start_IT))
@@ -1704,7 +1704,8 @@ Global Symbols
 <P><STRONG><a name="[12b]"></a>HAL_GPIO_Init</STRONG> (Thumb, 468 bytes, Stack size 24 bytes, stm32h7xx_hal_gpio.o(i.HAL_GPIO_Init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = HAL_GPIO_Init
 </UL>
-<BR>[Called By]<UL><LI><a href="#[1e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_GPIO_Init
+<BR>[Called By]<UL><LI><a href="#[128]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_ADC_MspInit
+<LI><a href="#[1e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_GPIO_Init
 <LI><a href="#[1b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_MspInit
 <LI><a href="#[1a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_MspPostInit
 <LI><a href="#[195]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_Base_MspInit
@@ -1712,7 +1713,6 @@ Global Symbols
 <LI><a href="#[16f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_I2C_MspInit
 <LI><a href="#[16a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_FDCAN_MspInit
 <LI><a href="#[139]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DAC_MspInit
-<LI><a href="#[128]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_ADC_MspInit
 </UL>
 
 <P><STRONG><a name="[1e3]"></a>HAL_GPIO_WritePin</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, stm32h7xx_hal_gpio.o(i.HAL_GPIO_WritePin))
@@ -3842,7 +3842,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;server_send_task
 </UL>
 
-<P><STRONG><a name="[9a]"></a>main</STRONG> (Thumb, 128 bytes, Stack size 0 bytes, main.o(i.main))
+<P><STRONG><a name="[9a]"></a>main</STRONG> (Thumb, 134 bytes, Stack size 0 bytes, main.o(i.main))
 <BR><BR>[Stack]<UL><LI>Max Depth = 752<LI>Call Chain = main &rArr; MX_LWIP_Init &rArr; netif_add &rArr; netif_set_addr &rArr; netif_set_ipaddr &rArr; tcp_netif_ip_addr_changed &rArr; tcp_netif_ip_addr_changed_pcblist &rArr; tcp_abort &rArr; tcp_abandon &rArr; tcp_pcb_remove &rArr; tcp_output &rArr; tcp_output_segment &rArr; ip4_output_if &rArr; ip4_output_if_src &rArr; ip4_frag &rArr; pbuf_alloc &rArr; pbuf_pool_is_empty &rArr; tcpip_callback_with_block &rArr; memp_free &rArr; do_memp_free_pool &rArr; sys_arch_unprotect &rArr; osMutexRelease &rArr; xQueueGenericSend &rArr; vTaskPlaceOnEventList &rArr; prvAddCurrentTaskToDelayedList &rArr; vListInsert
 </UL>
 <BR>[Calls]<UL><LI><a href="#[2c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osKernelStart
@@ -4683,15 +4683,15 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[2fe]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;tcp_unpack_fifo_data
 </UL>
 
-<P><STRONG><a name="[329]"></a>rov_angle_loop_calc</STRONG> (Thumb, 494 bytes, Stack size 32 bytes, rov_behaviour.o(i.rov_angle_loop_calc))
-<BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = rov_angle_loop_calc
+<P><STRONG><a name="[329]"></a>rov_angle_loop_calc</STRONG> (Thumb, 528 bytes, Stack size 40 bytes, rov_behaviour.o(i.rov_angle_loop_calc))
+<BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = rov_angle_loop_calc
 </UL>
 <BR>[Calls]<UL><LI><a href="#[32a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PID_calc
 </UL>
 <BR>[Called By]<UL><LI><a href="#[32b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rov_control_loop
 </UL>
 
-<P><STRONG><a name="[32c]"></a>rov_depth_loop_calc</STRONG> (Thumb, 210 bytes, Stack size 32 bytes, rov_behaviour.o(i.rov_depth_loop_calc))
+<P><STRONG><a name="[32c]"></a>rov_depth_loop_calc</STRONG> (Thumb, 262 bytes, Stack size 32 bytes, rov_behaviour.o(i.rov_depth_loop_calc))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = rov_depth_loop_calc
 </UL>
 <BR>[Calls]<UL><LI><a href="#[32a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PID_calc
@@ -4700,7 +4700,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[d9]"></a>rov_movation_task</STRONG> (Thumb, 106 bytes, Stack size 0 bytes, rov_movation_task.o(i.rov_movation_task))
-<BR><BR>[Stack]<UL><LI>Max Depth = 104<LI>Call Chain = rov_movation_task &rArr; rov_control_loop &rArr; rov_depth_loop_calc
+<BR><BR>[Stack]<UL><LI>Max Depth = 112<LI>Call Chain = rov_movation_task &rArr; rov_control_loop &rArr; rov_angle_loop_calc
 </UL>
 <BR>[Calls]<UL><LI><a href="#[205]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osDelay
 <LI><a href="#[202]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay
@@ -6359,7 +6359,7 @@ Local Symbols
 </UL>
 
 <P><STRONG><a name="[32b]"></a>rov_control_loop</STRONG> (Thumb, 176 bytes, Stack size 72 bytes, rov_movation_task.o(i.rov_control_loop))
-<BR><BR>[Stack]<UL><LI>Max Depth = 104<LI>Call Chain = rov_control_loop &rArr; rov_depth_loop_calc
+<BR><BR>[Stack]<UL><LI>Max Depth = 112<LI>Call Chain = rov_control_loop &rArr; rov_angle_loop_calc
 </UL>
 <BR>[Calls]<UL><LI><a href="#[32d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;track_turn_loop_calc
 <LI><a href="#[32e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rov_vf_control_calc
@@ -6395,7 +6395,7 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rov_movation_task
 </UL>
 
-<P><STRONG><a name="[33b]"></a>rov_set_contorl</STRONG> (Thumb, 384 bytes, Stack size 0 bytes, rov_movation_task.o(i.rov_set_contorl))
+<P><STRONG><a name="[33b]"></a>rov_set_contorl</STRONG> (Thumb, 390 bytes, Stack size 0 bytes, rov_movation_task.o(i.rov_set_contorl))
 <BR><BR>[Called By]<UL><LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rov_movation_task
 </UL>
 

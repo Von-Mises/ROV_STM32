@@ -52,10 +52,12 @@
 #define ROV_OPEN_YAW_SCALE        10 					// 开环模式下YAW角比例系数
 #define ROV_OPEN_ROL_SCALE        14 					// 开环模式下YAW角比例系数
 #define ROV_OPEN_PIT_SCALE        14				    // 开环模式下YAW角比例系数
-#define ROV_OPEN_VELOCITY_SCALE   20 			        // 开环模式下前后或沉浮速度的比例系数
+#define ROV_OPEN_FORWAD_SCALE     20 			        // 开环模式下前后速度的比例系数
+#define ROV_OPEN_HEAVE_SCALE      15                    // 开环模式下升沉速度的比例系数
 #define TRACK_OPEN_WZ_SCALE       50 					// 开环模式下履带旋转的比例系数
 #define TRACK_OPEN_VELOCITY_SCALE 20 				 	// 开环模式下履带直线运动的比例系数
-#define ROV_DEPTH_HOLD_DEADLINE   50 					// 定深模式下，让ROV保持定深模式的vz的死区速度，大于这个速度将开环发送给垂直推进器
+#define ROV_DEPTH_HOLD_DEADLINE   50 					// 定深模式下，让ROV保持定深模式的死区速度，大于这个速度将开环发送给垂直推进器
+#define ROV_YAW_HOLD_DEADLINE     90					// 定艏模式下，让ROV保持定艏模式的死区速度，大于这个速度将开环发送给垂直推进器
 #define ROV_MAX_YAW_SET           180                   // 爬行转向控制下发幅值
 #define ROV_MAX_TRA_FORWARD_SET   100					// 爬行前进控制下发幅值
 #define ROV_MAX_THR_FORWARD_SET   100					// 推进前进控制下发幅值

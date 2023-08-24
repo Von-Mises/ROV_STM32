@@ -49,11 +49,11 @@
 
 //depth hold loop PID
 //定深环pid值
-#define ROV_DEPTH_PID_KP 50000.0f
-#define ROV_DEPTH_PID_KI 0.0f
+#define ROV_DEPTH_PID_KP 30000.0f
+#define ROV_DEPTH_PID_KI 1000.0f
 #define ROV_DEPTH_PID_KD 0.0f
 #define ROV_DEPTH_PID_MAX_OUT 1000.0f
-#define ROV_DEPTH_PID_MAX_IOUT 0.2f
+#define ROV_DEPTH_PID_MAX_IOUT 50.0f
 
 //track mode turn loop PID
 //履带模式下转向环PID
@@ -76,8 +76,8 @@
 #define ROV_YAW_ANGLE_PID_KP 1000.0f
 #define ROV_YAW_ANGLE_PID_KI 0.0f
 #define ROV_YAW_ANGLE_PID_KD 0.0f
-#define ROV_YAW_ANGLE_PID_MAX_OUT 2000.0f
-#define ROV_YAW_ANGLE_PID_MAX_IOUT 0.2f
+#define ROV_YAW_ANGLE_PID_MAX_OUT 1000.0f
+#define ROV_YAW_ANGLE_PID_MAX_IOUT 50.0f
 
 //yaw angular velocity PID
 //Yaw角速度pid
