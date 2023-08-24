@@ -79,6 +79,7 @@ uint8_t get_rov_behaviour(void)
 void rov_angle_loop_calc(fp32 *yaw_control_out, fp32 *pitch_control_out, fp32 *roll_control_out, rov_move_t * rov_loop_calc)
 {
 	fp32 cur_yaw_set = rov_loop_calc->yaw_set;
+	fp32 cur_roll_set = rov_loop_calc->roll_set;
 	
 	if(rov_loop_calc->rov_mode == ROV_ONLY_ATTHOLD || rov_loop_calc->rov_mode == ROV_NORMAL)
 	{
@@ -100,8 +101,10 @@ void rov_angle_loop_calc(fp32 *yaw_control_out, fp32 *pitch_control_out, fp32 *r
 		//当推杆速度超过死区时，重新调整目标艏向
 		else
 		{
-			*yaw_control_out = cur_yaw_set*ROV_OPEN_YAW_SCALE;
+			*yaw_control_out = 1500; //cur_yaw_set*ROV_OPEN_YAW_SCALE;
+			rov_loop_calc->last_rov_mode = ROV_ZERO_FORCE;
 		}
+		
 //		if(yaw_tar == 360) yaw_cur = 360;
 //		else
 //		{
@@ -117,34 +120,30 @@ void rov_angle_loop_calc(fp32 *yaw_control_out, fp32 *pitch_control_out, fp32 *r
 //		*roll_control_out = rov_loop_calc->roll_set*ROV_OPEN_ANGLE_SCALE;
 		*pitch_control_out = rov_loop_calc->pitch_set*ROV_OPEN_PIT_SCALE;
 		
-		uint16_t half_max_thr_roll_set = ROV_MAX_THR_ROLL_SET * ROV_OPEN_ROL_SCALE / 2;
-		uint16_t half_max_roll_set = ROV_MAX_THR_ROLL_SET / 2;
-		if(rov_loop_calc->roll_set > half_max_roll_set)
+		if(cur_roll_set > (ROV_MAX_THR_ROLL_SET / 2))
 		{
-			*roll_control_out = 2 * half_max_thr_roll_set;
+			*roll_control_out = cur_roll_set * ROV_OPEN_ROL_SCALE;
 		}
-		else if(rov_loop_calc->roll_set >= -half_max_roll_set && rov_loop_calc->roll_set <= half_max_roll_set)
+		else if(cur_roll_set >= - (ROV_MAX_THR_ROLL_SET / 2) && cur_roll_set <= (ROV_MAX_THR_ROLL_SET / 2))
 		{
 			*roll_control_out = 0;
 		}
-		else if(rov_loop_calc->roll_set < -half_max_roll_set)
+		else if(cur_roll_set < -(ROV_MAX_THR_ROLL_SET / 2))
 		{
-			*roll_control_out = -2 * half_max_thr_roll_set;
+			*roll_control_out = cur_roll_set * ROV_OPEN_ROL_SCALE;
 		}
 		
-		uint16_t half_max_thr_yaw_set = ROV_MAX_THR_YAW_SET * ROV_OPEN_YAW_SCALE / 2;
-		uint16_t half_max_yaw_set = ROV_MAX_THR_YAW_SET / 2;
-		if(rov_loop_calc->yaw_set > half_max_yaw_set)
+		if(cur_yaw_set > (ROV_MAX_THR_YAW_SET / 2))
 		{
-			*yaw_control_out = 2 * half_max_thr_yaw_set;
+			*yaw_control_out = cur_yaw_set * ROV_OPEN_YAW_SCALE;
 		}
-		else if(rov_loop_calc->yaw_set >= -half_max_yaw_set && rov_loop_calc->yaw_set <= half_max_yaw_set)
+		else if(cur_yaw_set >= - (ROV_MAX_THR_YAW_SET / 2) && cur_yaw_set <= (ROV_MAX_THR_YAW_SET / 2))
 		{
 			*yaw_control_out = 0;
 		}
-		else if(rov_loop_calc->yaw_set < -half_max_yaw_set)
+		else if(cur_yaw_set < -(ROV_MAX_THR_YAW_SET / 2))
 		{
-			*yaw_control_out = -2 * half_max_thr_yaw_set;
+			*yaw_control_out = cur_yaw_set * ROV_OPEN_YAW_SCALE;
 		}
 	}
 	
@@ -175,8 +174,10 @@ void rov_depth_loop_calc(fp32 *depth_control_out, rov_move_t * rov_loop_calc)
 		//当推杆速度超过死区时，重新调整目标深度
 		else
 		{
-			*depth_control_out = cur_vz_set*ROV_OPEN_HEAVE_SCALE;
+			*depth_control_out = 1000;//cur_vz_set*ROV_OPEN_HEAVE_SCALE;
+			rov_loop_calc->last_rov_mode = ROV_ZERO_FORCE;
 		}
+		
 //		//获取当前值
 //		fp32 depth_cur = rov_loop_calc->depth;
 //		//获取目标值
@@ -193,19 +194,17 @@ void rov_depth_loop_calc(fp32 *depth_control_out, rov_move_t * rov_loop_calc)
 		}
 		else
 		{
-			uint16_t half_max_thr_heave_set = ROV_MAX_THR_HEAVE_SET * 1000 / 2;
-			uint16_t half_max_heave_set = ROV_MAX_THR_HEAVE_SET / 2;
-			if(cur_vz_set> half_max_heave_set)
+			if(cur_vz_set> ROV_MAX_THR_HEAVE_SET / 2)
 			{
-				*depth_control_out = 2 * half_max_thr_heave_set;
+				*depth_control_out = cur_vz_set * ROV_OPEN_HEAVE_SCALE;
 			}
-			else if(cur_vz_set >= -half_max_heave_set && rov_loop_calc->yaw_set <= half_max_heave_set)
+			else if(cur_vz_set >= -(ROV_MAX_THR_HEAVE_SET / 2) && cur_vz_set <= (ROV_MAX_THR_HEAVE_SET / 2))
 			{
 				*depth_control_out = 0;
 			}
-			else if(cur_vz_set < -half_max_heave_set)
+			else if(cur_vz_set < -(ROV_MAX_THR_HEAVE_SET / 2))
 			{
-				*depth_control_out = -2 * half_max_thr_heave_set;
+				*depth_control_out = cur_vz_set * ROV_OPEN_HEAVE_SCALE;
 			}
 		}
 	}

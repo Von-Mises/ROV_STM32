@@ -36,6 +36,6 @@
 
 extern void DM_init(void);
 extern void DM_reset(void);
-extern float get_depth_data(void);
+extern float *get_depth_data_point(void);
 
 #endif

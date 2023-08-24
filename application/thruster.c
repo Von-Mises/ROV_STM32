@@ -35,7 +35,7 @@ extern FDCAN_HandleTypeDef hfdcan1;
 		(ptr)->motor_temperate = ((data)[7]-50); 														\
     }
 
-#define max 2500		
+#define max 2400		
 #define _Limit(var)       (var = (((var) < (max)) ? (var) : (max)))
 		
 /*

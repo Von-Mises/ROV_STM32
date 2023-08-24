@@ -101,7 +101,7 @@ static void dm_to_usart1(uint8_t *dm_data);
 #endif
 
 /**
-  * @brief          get  depth data 
+  * @brief          get depth data point
   * @param[in]      none
   * @retval         depth data 
   */
@@ -110,9 +110,9 @@ static void dm_to_usart1(uint8_t *dm_data);
   * @param[in]      none
   * @retval         Éî¶È
   */
-float get_depth_data(void)
+float* get_depth_data_point(void)
 {
-    return depth;
+    return &depth;
 }
 
 /**

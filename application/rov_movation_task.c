@@ -120,7 +120,7 @@ static void rov_mode_change_control_transit(rov_move_t *rov_move_transit)
 
 /**
   * @brief          返回ROV控制模式
-  * @param[in]     none
+  * @param[in]      none
   * @retval         uint8_t
   */
 uint8_t get_rov_mode(void)
@@ -182,8 +182,6 @@ static void rov_feedback_update(rov_move_t *rov_move_updata)
 	{
 		rov_move_updata->motor_rov.thruster_speed[i] = get_thruster_measure_point(i)->speed_rpm;
 	}
-	//获取深度
-	rov_move_updata->depth = get_depth_data();
 }
 
 /**
@@ -273,8 +271,11 @@ static void rov_init(rov_move_t *rov_move_init)
     rov_move_init->rov_Pos_Ctrl = get_pos_ctrl_cmd();
 	
     //get gyro sensor euler angle point
-    //获取陀螺仪姿态角指针
+    //获取AHRS数据指针
     rov_move_init->IMU_data = get_imu_data_point();
+	
+	//获取深度计数据指针
+	rov_move_init->depth = *(get_depth_data_point());
 
     //update data
     //更新一下数据
@@ -335,9 +336,22 @@ static void rov_set_contorl(rov_move_t *rov_move_control)
     {
 //		rov_move_control->depth_set = rov_move_control->rov_Pos_Ctrl->Depth;
 //		rov_move_control->yaw_angle_set = rov_move_control->rov_Pos_Ctrl->Yaw;
-		
-		rov_move_control->depth_set = rov_move_control->depth;
-		rov_move_control->yaw_angle_set = rov_move_control->IMU_data->yaw;
+		if(rov_move_control->last_rov_mode != ROV_NORMAL && rov_move_control->rov_mode == ROV_NORMAL)
+		{
+			rov_move_control->depth_set = rov_move_control->depth;
+			rov_move_control->yaw_angle_set = rov_move_control->IMU_data->yaw;
+			rov_move_control->last_rov_mode = ROV_NORMAL;
+		}
+		else if(rov_move_control->last_rov_mode != ROV_ONLY_ATTHOLD && rov_move_control->rov_mode == ROV_ONLY_ATTHOLD)
+		{
+			rov_move_control->yaw_angle_set = rov_move_control->IMU_data->yaw;
+			rov_move_control->last_rov_mode = ROV_ONLY_ATTHOLD;
+		}
+		else if(rov_move_control->last_rov_mode != ROV_ONLY_ALTHOLD && rov_move_control->rov_mode == ROV_ONLY_ALTHOLD)
+		{
+			rov_move_control->depth_set = rov_move_control->depth;
+			rov_move_control->last_rov_mode = ROV_ONLY_ALTHOLD;
+		}
 		
 		rov_move_control->vf_set = rov_move_control->rov_Ctrl->VF;
 		rov_move_control->vz_set = rov_move_control->rov_Ctrl->VZ;

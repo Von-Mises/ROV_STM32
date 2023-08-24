@@ -49,11 +49,11 @@
 #include "struct_typedef.h"
 #include "rov_movation_task.h"
 
-#define ROV_OPEN_YAW_SCALE        10 					// 开环模式下YAW角比例系数
-#define ROV_OPEN_ROL_SCALE        14 					// 开环模式下YAW角比例系数
-#define ROV_OPEN_PIT_SCALE        14				    // 开环模式下YAW角比例系数
+#define ROV_OPEN_YAW_SCALE        8 					// 开环模式下YAW角比例系数
+#define ROV_OPEN_ROL_SCALE        14 					// 开环模式下ROLL角比例系数
+#define ROV_OPEN_PIT_SCALE        14				    // 开环模式下PITCH角比例系数
 #define ROV_OPEN_FORWAD_SCALE     20 			        // 开环模式下前后速度的比例系数
-#define ROV_OPEN_HEAVE_SCALE      15                    // 开环模式下升沉速度的比例系数
+#define ROV_OPEN_HEAVE_SCALE      12                    // 开环模式下升沉速度的比例系数
 #define TRACK_OPEN_WZ_SCALE       50 					// 开环模式下履带旋转的比例系数
 #define TRACK_OPEN_VELOCITY_SCALE 20 				 	// 开环模式下履带直线运动的比例系数
 #define ROV_DEPTH_HOLD_DEADLINE   50 					// 定深模式下，让ROV保持定深模式的死区速度，大于这个速度将开环发送给垂直推进器

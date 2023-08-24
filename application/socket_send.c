@@ -249,7 +249,7 @@ static void rov_status_update(ext_rov_status_t *rov_status_updata)
 	
 	rov_status_updata->IMU_data = *(get_imu_data_point());
 	rov_status_updata->ROV_height = get_height_data();
-	rov_status_updata->ROV_depth = get_depth_data();
+	rov_status_updata->ROV_depth = *(get_depth_data_point());
 	/*»¹Î´Ìí¼ÓÍê*/
 }
 

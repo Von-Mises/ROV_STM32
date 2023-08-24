@@ -3,7 +3,7 @@
 <title>Static Call Graph - [ROV\ROV.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image ROV\ROV.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Thu Aug 24 09:27:03 2023
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Fri Aug 25 01:04:24 2023
 <BR><P>
 <H3>Maximum Stack Usage =        768 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -952,7 +952,7 @@ Global Symbols
 <P><STRONG><a name="[9]"></a>BusFault_Handler</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, stm32h7xx_it.o(i.BusFault_Handler))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32h743xx.o(RESET)
 </UL>
-<P><STRONG><a name="[107]"></a>CAN_cmd_control</STRONG> (Thumb, 160 bytes, Stack size 24 bytes, thruster.o(i.CAN_cmd_control))
+<P><STRONG><a name="[107]"></a>CAN_cmd_control</STRONG> (Thumb, 156 bytes, Stack size 24 bytes, thruster.o(i.CAN_cmd_control))
 <BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = CAN_cmd_control &rArr; HAL_FDCAN_AddMessageToTxFifoQ &rArr; FDCAN_CopyMessageToRAM
 </UL>
 <BR>[Calls]<UL><LI><a href="#[108]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_FDCAN_AddMessageToTxFifoQ
@@ -2617,8 +2617,8 @@ Global Symbols
 <LI><a href="#[329]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rov_angle_loop_calc
 </UL>
 
-<P><STRONG><a name="[336]"></a>PID_init</STRONG> (Thumb, 92 bytes, Stack size 0 bytes, pid.o(i.PID_init))
-<BR><BR>[Called By]<UL><LI><a href="#[335]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rov_init
+<P><STRONG><a name="[335]"></a>PID_init</STRONG> (Thumb, 92 bytes, Stack size 0 bytes, pid.o(i.PID_init))
+<BR><BR>[Called By]<UL><LI><a href="#[334]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rov_init
 </UL>
 
 <P><STRONG><a name="[1fa]"></a>Pulse_Fb_Init</STRONG> (Thumb, 22 bytes, Stack size 8 bytes, bsp_pulse.o(i.Pulse_Fb_Init))
@@ -3299,12 +3299,12 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[326]"></a>get_ctrl_cmd</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, comunication.o(i.get_ctrl_cmd))
-<BR><BR>[Called By]<UL><LI><a href="#[335]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rov_init
+<BR><BR>[Called By]<UL><LI><a href="#[334]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rov_init
 <LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pwm_task
 </UL>
 
-<P><STRONG><a name="[334]"></a>get_depth_data</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, depth_meter_receive.o(i.get_depth_data))
-<BR><BR>[Called By]<UL><LI><a href="#[331]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rov_feedback_update
+<P><STRONG><a name="[338]"></a>get_depth_data_point</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, depth_meter_receive.o(i.get_depth_data_point))
+<BR><BR>[Called By]<UL><LI><a href="#[334]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rov_init
 <LI><a href="#[33f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rov_status_update
 </UL>
 
@@ -3312,8 +3312,8 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[33f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rov_status_update
 </UL>
 
-<P><STRONG><a name="[338]"></a>get_imu_data_point</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, imu_receive.o(i.get_imu_data_point))
-<BR><BR>[Called By]<UL><LI><a href="#[335]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rov_init
+<P><STRONG><a name="[337]"></a>get_imu_data_point</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, imu_receive.o(i.get_imu_data_point))
+<BR><BR>[Called By]<UL><LI><a href="#[334]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rov_init
 <LI><a href="#[33f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rov_status_update
 </UL>
 
@@ -3323,8 +3323,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[33b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rov_set_pids
 </UL>
 
-<P><STRONG><a name="[337]"></a>get_pos_ctrl_cmd</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, comunication.o(i.get_pos_ctrl_cmd))
-<BR><BR>[Called By]<UL><LI><a href="#[335]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rov_init
+<P><STRONG><a name="[336]"></a>get_pos_ctrl_cmd</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, comunication.o(i.get_pos_ctrl_cmd))
+<BR><BR>[Called By]<UL><LI><a href="#[334]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rov_init
 </UL>
 
 <P><STRONG><a name="[344]"></a>get_rov_behaviour</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, rov_behaviour.o(i.get_rov_behaviour))
@@ -3842,7 +3842,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;server_send_task
 </UL>
 
-<P><STRONG><a name="[9a]"></a>main</STRONG> (Thumb, 128 bytes, Stack size 0 bytes, main.o(i.main))
+<P><STRONG><a name="[9a]"></a>main</STRONG> (Thumb, 134 bytes, Stack size 0 bytes, main.o(i.main))
 <BR><BR>[Stack]<UL><LI>Max Depth = 752<LI>Call Chain = main &rArr; MX_LWIP_Init &rArr; netif_add &rArr; netif_set_addr &rArr; netif_set_ipaddr &rArr; tcp_netif_ip_addr_changed &rArr; tcp_netif_ip_addr_changed_pcblist &rArr; tcp_abort &rArr; tcp_abandon &rArr; tcp_pcb_remove &rArr; tcp_output &rArr; tcp_output_segment &rArr; ip4_output_if &rArr; ip4_output_if_src &rArr; ip4_frag &rArr; pbuf_alloc &rArr; pbuf_pool_is_empty &rArr; tcpip_callback_with_block &rArr; memp_free &rArr; do_memp_free_pool &rArr; sys_arch_unprotect &rArr; osMutexRelease &rArr; xQueueGenericSend &rArr; vTaskPlaceOnEventList &rArr; prvAddCurrentTaskToDelayedList &rArr; vListInsert
 </UL>
 <BR>[Calls]<UL><LI><a href="#[2c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osKernelStart
@@ -4683,7 +4683,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[2fe]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;tcp_unpack_fifo_data
 </UL>
 
-<P><STRONG><a name="[329]"></a>rov_angle_loop_calc</STRONG> (Thumb, 528 bytes, Stack size 40 bytes, rov_behaviour.o(i.rov_angle_loop_calc))
+<P><STRONG><a name="[329]"></a>rov_angle_loop_calc</STRONG> (Thumb, 418 bytes, Stack size 40 bytes, rov_behaviour.o(i.rov_angle_loop_calc))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = rov_angle_loop_calc
 </UL>
 <BR>[Calls]<UL><LI><a href="#[32a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PID_calc
@@ -4691,7 +4691,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[32b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rov_control_loop
 </UL>
 
-<P><STRONG><a name="[32c]"></a>rov_depth_loop_calc</STRONG> (Thumb, 262 bytes, Stack size 32 bytes, rov_behaviour.o(i.rov_depth_loop_calc))
+<P><STRONG><a name="[32c]"></a>rov_depth_loop_calc</STRONG> (Thumb, 224 bytes, Stack size 32 bytes, rov_behaviour.o(i.rov_depth_loop_calc))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = rov_depth_loop_calc
 </UL>
 <BR>[Calls]<UL><LI><a href="#[32a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PID_calc
@@ -4709,7 +4709,7 @@ Global Symbols
 <LI><a href="#[33a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rov_set_mode
 <LI><a href="#[33c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rov_set_contorl
 <LI><a href="#[339]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rov_mode_change_control_transit
-<LI><a href="#[335]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rov_init
+<LI><a href="#[334]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rov_init
 <LI><a href="#[331]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rov_feedback_update
 <LI><a href="#[32b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rov_control_loop
 <LI><a href="#[107]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_cmd_control
@@ -6329,16 +6329,16 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;server_send_task
 </UL>
 
-<P><STRONG><a name="[33f]"></a>rov_status_update</STRONG> (Thumb, 204 bytes, Stack size 24 bytes, socket_send.o(i.rov_status_update))
+<P><STRONG><a name="[33f]"></a>rov_status_update</STRONG> (Thumb, 202 bytes, Stack size 24 bytes, socket_send.o(i.rov_status_update))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = rov_status_update
 </UL>
 <BR>[Calls]<UL><LI><a href="#[345]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_height_data
-<LI><a href="#[334]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_depth_data
+<LI><a href="#[338]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_depth_data_point
 <LI><a href="#[340]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_cabin_temperature
 <LI><a href="#[341]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_cabin_humidity
 <LI><a href="#[342]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_water_level_percentage
 <LI><a href="#[343]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_cpu_temperature
-<LI><a href="#[338]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_imu_data_point
+<LI><a href="#[337]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_imu_data_point
 <LI><a href="#[333]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_thruster_measure_point
 <LI><a href="#[344]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_rov_behaviour
 <LI><a href="#[332]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_crawler_motor_speed
@@ -6373,25 +6373,25 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rov_movation_task
 </UL>
 
-<P><STRONG><a name="[331]"></a>rov_feedback_update</STRONG> (Thumb, 66 bytes, Stack size 24 bytes, rov_movation_task.o(i.rov_feedback_update))
+<P><STRONG><a name="[331]"></a>rov_feedback_update</STRONG> (Thumb, 58 bytes, Stack size 24 bytes, rov_movation_task.o(i.rov_feedback_update))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = rov_feedback_update
 </UL>
-<BR>[Calls]<UL><LI><a href="#[334]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_depth_data
-<LI><a href="#[333]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_thruster_measure_point
+<BR>[Calls]<UL><LI><a href="#[333]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_thruster_measure_point
 <LI><a href="#[332]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_crawler_motor_speed
 </UL>
 <BR>[Called By]<UL><LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rov_movation_task
-<LI><a href="#[335]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rov_init
+<LI><a href="#[334]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rov_init
 </UL>
 
-<P><STRONG><a name="[335]"></a>rov_init</STRONG> (Thumb, 246 bytes, Stack size 16 bytes, rov_movation_task.o(i.rov_init))
+<P><STRONG><a name="[334]"></a>rov_init</STRONG> (Thumb, 258 bytes, Stack size 16 bytes, rov_movation_task.o(i.rov_init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = rov_init &rArr; rov_feedback_update
 </UL>
 <BR>[Calls]<UL><LI><a href="#[326]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_ctrl_cmd
-<LI><a href="#[338]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_imu_data_point
-<LI><a href="#[336]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PID_init
+<LI><a href="#[338]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_depth_data_point
+<LI><a href="#[337]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_imu_data_point
+<LI><a href="#[335]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PID_init
 <LI><a href="#[331]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rov_feedback_update
-<LI><a href="#[337]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_pos_ctrl_cmd
+<LI><a href="#[336]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_pos_ctrl_cmd
 </UL>
 <BR>[Called By]<UL><LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rov_movation_task
 </UL>
@@ -6400,7 +6400,7 @@ Local Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rov_movation_task
 </UL>
 
-<P><STRONG><a name="[33c]"></a>rov_set_contorl</STRONG> (Thumb, 392 bytes, Stack size 0 bytes, rov_movation_task.o(i.rov_set_contorl))
+<P><STRONG><a name="[33c]"></a>rov_set_contorl</STRONG> (Thumb, 456 bytes, Stack size 0 bytes, rov_movation_task.o(i.rov_set_contorl))
 <BR><BR>[Called By]<UL><LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rov_movation_task
 </UL>
 
