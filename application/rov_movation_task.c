@@ -27,18 +27,6 @@
 #include "depth_meter_receive.h"
 #include "detect_task.h"
 
-#define rc_deadband_limit(input, output, dealine)        \
-    {                                                    \
-        if ((input) > (dealine) || (input) < -(dealine)) \
-        {                                                \
-            (output) = (input);                          \
-        }                                                \
-        else                                             \
-        {                                                \
-            (output) = 0;                                \
-        }                                                \
-    }
-
 //ROV运动数据
 rov_move_t rov_move;
 
@@ -65,6 +53,9 @@ void rov_movation_task(void const *pvParameters)
 
     while (1)
     {
+		//when mode changes, save some data
+        //模式切换数据保存
+		rov_mode_change_control_transit(&rov_move);
         //set rov control mode
         //设置ROV控制模式
         rov_set_mode(&rov_move);
@@ -102,6 +93,30 @@ void rov_movation_task(void const *pvParameters)
     }
 }
 
+/**
+  * @brief          when rov mode change, some param should be changed
+  * @param[out]     rov_move_transit: "rov_move" valiable point
+  * @retval         none
+  */
+/**
+  * @brief          rov模式改变，有些参数需要记忆
+  * @param[out]     rov_move_transit:"rov_move_t"变量指针.
+  * @retval         none
+  */
+static void rov_mode_change_control_transit(rov_move_t *rov_move_transit)
+{
+    if (rov_move_transit == NULL)
+    {
+        return;
+    }
+
+    if (rov_move_transit->rov_Ctrl->Mode != rov_move_transit->rov_mode)
+    {
+        rov_move_transit->last_rov_mode = rov_move_transit->rov_mode;
+    }
+	else return ;
+    
+}
 
 /**
   * @brief          返回ROV控制模式
@@ -237,9 +252,13 @@ static void rov_init(rov_move_t *rov_move_init)
 	PID_init(&rov_move_init->roll_angular_velocity_pid, PID_DELTA, rov_roll_w_pid, ROV_ROLL_ANGULAR_VELOCITY_PID_MAX_OUT, ROV_ROLL_ANGULAR_VELOCITY_PID_MAX_IOUT);
 	PID_init(&rov_move_init->roll_angle_pid, PID_POSITION, rov_roll_pid, ROV_ROLL_ANGLE_PID_MAX_OUT, ROV_ROLL_ANGLE_PID_MAX_IOUT);
 
-    //in beginning， rov mode is normal 
-    //rov开机状态为正常
+    //in beginning， rov mode is  ROV_ZERO_FORCE
+    //rov开机状态模式为ROV_ZERO_FORCE
     rov_move_init->rov_mode = ROV_ZERO_FORCE;
+	
+	//in beginning， rov last mode is ROV_ZERO_FORCE 
+    //rov开机状态的上一模式为ROV_ZERO_FORCE
+	rov_move_init->last_rov_mode = ROV_ZERO_FORCE;
 	
 	//set pid change state to zero
 	//初始化pid更改标志位为0
@@ -298,8 +317,6 @@ static void rov_set_contorl(rov_move_t *rov_move_control)
     {
         return;
     }
-	rov_move_control->depth_set = rov_move_control->rov_Pos_Ctrl->Depth;
-	rov_move_control->yaw_angle_set = rov_move_control->rov_Pos_Ctrl->Yaw;
 
     //根据控制模式，给ROV配置实际速度
     if (rov_move_control->rov_mode == ROV_OPEN)
@@ -316,6 +333,12 @@ static void rov_set_contorl(rov_move_t *rov_move_control)
     else if (rov_move_control->rov_mode == ROV_NORMAL || rov_move_control->rov_mode == ROV_ONLY_ALTHOLD
 		     || rov_move_control->rov_mode == ROV_ONLY_ATTHOLD)
     {
+//		rov_move_control->depth_set = rov_move_control->rov_Pos_Ctrl->Depth;
+//		rov_move_control->yaw_angle_set = rov_move_control->rov_Pos_Ctrl->Yaw;
+		
+		rov_move_control->depth_set = rov_move_control->depth;
+		rov_move_control->yaw_angle_set = rov_move_control->IMU_data->yaw;
+		
 		rov_move_control->vf_set = rov_move_control->rov_Ctrl->VF;
 		rov_move_control->vz_set = rov_move_control->rov_Ctrl->VZ;
 		rov_move_control->yaw_set = rov_move_control->rov_Ctrl->YAW;

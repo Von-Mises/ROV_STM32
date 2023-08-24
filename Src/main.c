@@ -79,7 +79,7 @@ void MX_FREERTOS_Init(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-	SCB->VTOR = FLASH_BASE | 0x20000;
+//	SCB->VTOR = FLASH_BASE | 0x20000;
 	__enable_irq();
   /* USER CODE END 1 */
   
