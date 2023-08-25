@@ -3,7 +3,7 @@
 <title>Static Call Graph - [ROV\ROV.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image ROV\ROV.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Fri Aug 25 01:04:24 2023
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Fri Aug 25 09:07:30 2023
 <BR><P>
 <H3>Maximum Stack Usage =        768 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -4683,7 +4683,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[2fe]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;tcp_unpack_fifo_data
 </UL>
 
-<P><STRONG><a name="[329]"></a>rov_angle_loop_calc</STRONG> (Thumb, 418 bytes, Stack size 40 bytes, rov_behaviour.o(i.rov_angle_loop_calc))
+<P><STRONG><a name="[329]"></a>rov_angle_loop_calc</STRONG> (Thumb, 422 bytes, Stack size 40 bytes, rov_behaviour.o(i.rov_angle_loop_calc))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = rov_angle_loop_calc
 </UL>
 <BR>[Calls]<UL><LI><a href="#[32a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PID_calc
@@ -4691,7 +4691,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[32b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rov_control_loop
 </UL>
 
-<P><STRONG><a name="[32c]"></a>rov_depth_loop_calc</STRONG> (Thumb, 224 bytes, Stack size 32 bytes, rov_behaviour.o(i.rov_depth_loop_calc))
+<P><STRONG><a name="[32c]"></a>rov_depth_loop_calc</STRONG> (Thumb, 228 bytes, Stack size 32 bytes, rov_behaviour.o(i.rov_depth_loop_calc))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = rov_depth_loop_calc
 </UL>
 <BR>[Calls]<UL><LI><a href="#[32a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PID_calc
@@ -4716,10 +4716,8 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> freertos.o(.constdata)
 </UL>
-<P><STRONG><a name="[32e]"></a>rov_vf_control_calc</STRONG> (Thumb, 240 bytes, Stack size 12 bytes, rov_behaviour.o(i.rov_vf_control_calc))
-<BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = rov_vf_control_calc
-</UL>
-<BR>[Called By]<UL><LI><a href="#[32b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rov_control_loop
+<P><STRONG><a name="[32e]"></a>rov_vf_control_calc</STRONG> (Thumb, 202 bytes, Stack size 0 bytes, rov_behaviour.o(i.rov_vf_control_calc))
+<BR><BR>[Called By]<UL><LI><a href="#[32b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rov_control_loop
 </UL>
 
 <P><STRONG><a name="[346]"></a>sampling_cpu_temprate</STRONG> (Thumb, 102 bytes, Stack size 24 bytes, bsp_adc.o(i.sampling_cpu_temprate))

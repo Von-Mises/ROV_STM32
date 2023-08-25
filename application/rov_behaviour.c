@@ -101,7 +101,7 @@ void rov_angle_loop_calc(fp32 *yaw_control_out, fp32 *pitch_control_out, fp32 *r
 		//当推杆速度超过死区时，重新调整目标艏向
 		else
 		{
-			*yaw_control_out = 1500; //cur_yaw_set*ROV_OPEN_YAW_SCALE;
+			*yaw_control_out = cur_yaw_set*ROV_OPEN_YAW_SCALE;
 			rov_loop_calc->last_rov_mode = ROV_ZERO_FORCE;
 		}
 		
@@ -174,7 +174,7 @@ void rov_depth_loop_calc(fp32 *depth_control_out, rov_move_t * rov_loop_calc)
 		//当推杆速度超过死区时，重新调整目标深度
 		else
 		{
-			*depth_control_out = 1000;//cur_vz_set*ROV_OPEN_HEAVE_SCALE;
+			*depth_control_out = cur_vz_set*ROV_OPEN_HEAVE_SCALE;
 			rov_loop_calc->last_rov_mode = ROV_ZERO_FORCE;
 		}
 		
@@ -252,33 +252,34 @@ void track_turn_loop_calc(fp32 *track_wz_out, rov_move_t * rov_loop_calc)
 void rov_vf_control_calc(fp32 *vf_control_out, fp32 *track_vf_control_out, rov_move_t * rov_loop_calc)
 {
 //	*track_vf_control_out = rov_loop_calc->vf_crawl_set * TRACK_OPEN_VELOCITY_SCALE;
-	uint16_t half_tra_max_forward_set = ROV_MAX_TRA_FORWARD_SET * TRACK_OPEN_VELOCITY_SCALE / 2;
-	if(rov_loop_calc->vf_crawl_set > (ROV_MAX_TRA_FORWARD_SET / 2))
+	fp32 cur_vf_crawl_set = rov_loop_calc->vf_crawl_set;
+	fp32 cur_vf_set = rov_loop_calc->vf_set;
+	
+	if(cur_vf_crawl_set > (ROV_MAX_TRA_FORWARD_SET / 2))
 	{
-		*track_vf_control_out = 2 * half_tra_max_forward_set;
+		*track_vf_control_out = cur_vf_crawl_set * TRACK_OPEN_VELOCITY_SCALE;
 	}
-	else if(rov_loop_calc->vf_crawl_set >= -(ROV_MAX_TRA_FORWARD_SET / 2) && rov_loop_calc->vf_crawl_set <= (ROV_MAX_TRA_FORWARD_SET / 2))
+	else if(cur_vf_crawl_set >= -(ROV_MAX_TRA_FORWARD_SET / 2) && cur_vf_crawl_set <= (ROV_MAX_TRA_FORWARD_SET / 2))
 	{
 		*track_vf_control_out = 0;
 	}
-	else if(rov_loop_calc->vf_crawl_set < -(ROV_MAX_TRA_FORWARD_SET / 2))
+	else if(cur_vf_crawl_set < -(ROV_MAX_TRA_FORWARD_SET / 2))
 	{
-		*track_vf_control_out = -2 * half_tra_max_forward_set;
+		*track_vf_control_out = cur_vf_crawl_set * TRACK_OPEN_VELOCITY_SCALE;
 	}
 	
 //	*vf_control_out = rov_loop_calc->vf_set * ROV_OPEN_VELOCITY_SCALE;
-	uint16_t half_thr_max_forward_set = ROV_MAX_THR_FORWARD_SET * ROV_OPEN_FORWAD_SCALE / 2;
-	if(rov_loop_calc->vf_set > ROV_MAX_THR_FORWARD_SET / 2)
+	if(cur_vf_set > ROV_MAX_THR_FORWARD_SET / 2)
 	{
-		*vf_control_out = 2 * half_thr_max_forward_set;
+		*vf_control_out = cur_vf_set * ROV_OPEN_FORWAD_SCALE;
 	}
-	else if(rov_loop_calc->vf_set >= -(ROV_MAX_THR_FORWARD_SET / 2)  && rov_loop_calc->vf_set <= (ROV_MAX_THR_FORWARD_SET / 2))
+	else if(cur_vf_set >= -(ROV_MAX_THR_FORWARD_SET / 2)  && cur_vf_set <= (ROV_MAX_THR_FORWARD_SET / 2))
 	{
 		*vf_control_out = 0;
 	}
-	else if(rov_loop_calc->vf_set < -(ROV_MAX_THR_FORWARD_SET / 2))
+	else if(cur_vf_set < -(ROV_MAX_THR_FORWARD_SET / 2))
 	{
-		*vf_control_out = -2 * half_thr_max_forward_set;
+		*vf_control_out = cur_vf_set * ROV_OPEN_FORWAD_SCALE;
 	}
 	
 }
