@@ -138,14 +138,14 @@ typedef struct
     const ext_control_cmd_t *rov_Ctrl;             	//ROV使用的控制指针, the point to remote control
     const ext_control_pos_t *rov_Pos_Ctrl;                 //ROV使用的位姿控制指针， the point to pos control
     const IMU_data_t *IMU_data;             				//the point to the euler angle of gyro sensor.获取陀螺仪解算出的欧拉角指针
+	const float *depth;                                    //深度数据指针
     rov_mode_t rov_mode;               							//rov mode ROV当前模式
 	rov_mode_t last_rov_mode;                                   //last rov mode ROV上一模式
     motors_status_t motor_rov;          						//rov motor data.ROV电机数据
 	
 	int16_t thruster_speed_set[6];									//设定的推进器转速
 	int16_t track_voltage_set[2];									//设定的履带电机电压
-
-	fp32 depth;																		//深度数据
+															
 	fp32 depth_set;																	//设定的深度值
 	fp32 yaw_angle_set;																//设定的定艏角度
 	uint8_t pid_change;																//pid更改标志位

@@ -104,7 +104,9 @@ void rov_angle_loop_calc(fp32 *yaw_control_out, fp32 *pitch_control_out, fp32 *r
 			*yaw_control_out = cur_yaw_set*ROV_OPEN_YAW_SCALE;
 			rov_loop_calc->last_rov_mode = ROV_ZERO_FORCE;
 		}
-		
+	
+
+
 //		if(yaw_tar == 360) yaw_cur = 360;
 //		else
 //		{
@@ -163,7 +165,7 @@ void rov_depth_loop_calc(fp32 *depth_control_out, rov_move_t * rov_loop_calc)
 	if(rov_loop_calc->rov_mode == ROV_ONLY_ALTHOLD || rov_loop_calc->rov_mode == ROV_NORMAL)
 	{
 		//获取当前值
-		fp32 depth_cur = rov_loop_calc->depth;
+		fp32 depth_cur = *rov_loop_calc->depth;
 		//获取目标值
 		fp32 depth_tar = rov_loop_calc->depth_set;
 		//如果推杆速度过小，则进入定深环计算，否则开环发送
@@ -178,8 +180,10 @@ void rov_depth_loop_calc(fp32 *depth_control_out, rov_move_t * rov_loop_calc)
 			rov_loop_calc->last_rov_mode = ROV_ZERO_FORCE;
 		}
 		
+		
+		
 //		//获取当前值
-//		fp32 depth_cur = rov_loop_calc->depth;
+//		fp32 depth_cur = *rov_loop_calc->depth;
 //		//获取目标值
 //		fp32 depth_tar = rov_loop_calc->depth_set;
 //		//计算深度环

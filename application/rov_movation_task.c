@@ -84,12 +84,6 @@ void rov_movation_task(void const *pvParameters)
         //系统延时
         osDelay(ROV_CONTROL_TIME_MS);
 		
-		//定深、定艏模式下，重新设置定深深度和定艏角度
-//		if(rov_move.rov_mode == ROV_ONLY_ALTHOLD || rov_move.rov_mode == ROV_ONLY_ATTHOLD || rov_move.rov_mode == ROV_NORMAL)
-//		{
-//			rov_move.depth_set = get_depth_data();
-//			rov_move.yaw_angle_set = get_imu_data_point()->yaw;
-//		}
     }
 }
 
@@ -275,7 +269,7 @@ static void rov_init(rov_move_t *rov_move_init)
     rov_move_init->IMU_data = get_imu_data_point();
 	
 	//获取深度计数据指针
-	rov_move_init->depth = *(get_depth_data_point());
+	rov_move_init->depth = get_depth_data_point();
 
     //update data
     //更新一下数据
@@ -338,7 +332,7 @@ static void rov_set_contorl(rov_move_t *rov_move_control)
 //		rov_move_control->yaw_angle_set = rov_move_control->rov_Pos_Ctrl->Yaw;
 		if(rov_move_control->last_rov_mode != ROV_NORMAL && rov_move_control->rov_mode == ROV_NORMAL)
 		{
-			rov_move_control->depth_set = rov_move_control->depth;
+			rov_move_control->depth_set = *rov_move_control->depth;
 			rov_move_control->yaw_angle_set = rov_move_control->IMU_data->yaw;
 			rov_move_control->last_rov_mode = ROV_NORMAL;
 		}
@@ -349,7 +343,7 @@ static void rov_set_contorl(rov_move_t *rov_move_control)
 		}
 		else if(rov_move_control->last_rov_mode != ROV_ONLY_ALTHOLD && rov_move_control->rov_mode == ROV_ONLY_ALTHOLD)
 		{
-			rov_move_control->depth_set = rov_move_control->depth;
+			rov_move_control->depth_set = *rov_move_control->depth;
 			rov_move_control->last_rov_mode = ROV_ONLY_ALTHOLD;
 		}
 		
