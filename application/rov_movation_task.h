@@ -73,7 +73,7 @@
 
 //yaw angle PID
 //Yaw½Ç¶Èpid
-#define ROV_YAW_ANGLE_PID_KP 1000.0f
+#define ROV_YAW_ANGLE_PID_KP 500.0f
 #define ROV_YAW_ANGLE_PID_KI 0.0f
 #define ROV_YAW_ANGLE_PID_KD 0.0f
 #define ROV_YAW_ANGLE_PID_MAX_OUT 1000.0f

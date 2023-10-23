@@ -226,7 +226,6 @@ void CAN_param_request(uint8_t Motor_ID)
   */
 const motor_param_t *get_thruster_measure_point(uint8_t i)
 {
-	
     return &motor_param[(i % 6)];
 }
 

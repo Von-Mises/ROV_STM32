@@ -1,4 +1,3 @@
-
 #ifndef __FIFO_H__
 #define __FIFO_H__
 #ifdef __cplusplus
@@ -20,10 +19,10 @@
 
 #include "stm32h7xx_hal.h"
 
-#define FIFO_ENTER_CRITICAL __disable_irq
-#define FIFO_EXIT_CRITICAL __enable_irq
-#define FIFO_GET_CPU_SR __get_PRIMASK
-#define FIFO_RESTORE_CPU_SR(CPU_SR) __set_PRIMASK(CPU_SR)
+#define FIFO_ENTER_CRITICAL __disable_irq //关全局中断
+#define FIFO_EXIT_CRITICAL __enable_irq //开全局中断
+#define FIFO_GET_CPU_SR __get_PRIMASK //获取当前中断状态
+#define FIFO_RESTORE_CPU_SR(CPU_SR) __set_PRIMASK(CPU_SR) //恢复中断状态
 #define FIFO_CPU_SR_TYPE register unsigned long
 
   //******************************************************************************************

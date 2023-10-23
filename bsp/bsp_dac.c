@@ -24,9 +24,9 @@ uint32_t Motor_R;
 
 void Track_Motor_Init()
 {
-		HAL_DAC_SetValue(&hdac1, DAC_CHANNEL_1, DAC_ALIGN_12B_R, 0);
+	HAL_DAC_SetValue(&hdac1, DAC_CHANNEL_1, DAC_ALIGN_12B_R, 0);
     HAL_DAC_Start_DMA(&hdac1, DAC_CHANNEL_1,&Motor_L,1,DAC_ALIGN_12B_R);
-		HAL_DAC_SetValue(&hdac1, DAC_CHANNEL_2, DAC_ALIGN_12B_R, 0);
+	HAL_DAC_SetValue(&hdac1, DAC_CHANNEL_2, DAC_ALIGN_12B_R, 0);
     HAL_DAC_Start_DMA(&hdac1, DAC_CHANNEL_2,&Motor_R,1,DAC_ALIGN_12B_R);
 }
 
