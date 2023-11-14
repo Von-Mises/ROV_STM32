@@ -8,6 +8,7 @@ rov\bsp_init.o: ..\bsp\bsp_dac.h
 rov\bsp_init.o: ..\bsp\bsp_pulse.h
 rov\bsp_init.o: ..\bsp\bsp_pwm.h
 rov\bsp_init.o: ..\bsp\bsp_usart.h
+rov\bsp_init.o: ..\bsp\bsp_timer.h
 rov\bsp_init.o: ..\application\depth_meter_receive.h
 rov\bsp_init.o: ..\application\altimeter_receive.h
 rov\bsp_init.o: ..\application\config.h

@@ -1,7 +1,7 @@
 [PreviousGenFiles]
-HeaderPath=C:/Users/Laptop/Desktop/ROV/Inc
+HeaderPath=D:/Git_storage/ROV_STM32/Inc
 HeaderFiles=gpio.h;adc.h;debug.h;dma.h;fdcan.h;i2c.h;stm32h7xx_it.h;stm32h7xx_hal_conf.h;main.h;tim.h;crc.h;usart.h;FreeRTOSConfig.h;lwip.h;lwipopts.h;ethernetif.h;dac.h;
-SourcePath=C:/Users/Laptop/Desktop/ROV/Src
+SourcePath=D:/Git_storage/ROV_STM32/Src
 SourceFiles=gpio.c;adc.c;debug.c;dma.c;fdcan.c;i2c.c;stm32h7xx_it.c;stm32h7xx_hal_msp.c;main.c;tim.c;crc.c;usart.c;freertos.c;lwip.c;ethernetif.c;dac.c;stm32h7xx_hal_timebase_tim.c;
 
 [PreviousLibFiles]

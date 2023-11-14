@@ -36,6 +36,7 @@
 #include "parse_task.h"
 #include "detect_task.h"
 #include "debug_info.h"
+#include "task_time_count.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -49,6 +50,7 @@ osThreadId movation_task_handle;
 osThreadId parse_task_handle;
 osThreadId water_level_handle;
 osThreadId debug_info_handle;
+osThreadId task_time_count_handle;
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -75,6 +77,53 @@ osThreadId defaultTaskHandle;
 void StartDefaultTask(void const * argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
+
+/* Pre/Post sleep processing prototypes */
+void PreSleepProcessing(uint32_t *ulExpectedIdleTime);
+void PostSleepProcessing(uint32_t *ulExpectedIdleTime);
+
+/* Hook prototypes */
+void configureTimerForRunTimeStats(void);
+unsigned long getRunTimeCounterValue(void);
+
+/* USER CODE BEGIN 1 */
+/* Functions needed when configGENERATE_RUN_TIME_STATS is on */
+__weak void configureTimerForRunTimeStats(void)
+{
+	
+}
+
+__weak unsigned long getRunTimeCounterValue(void)
+{
+return 0;
+}
+/* USER CODE END 1 */
+
+/* USER CODE BEGIN PREPOSTSLEEP */
+__weak void PreSleepProcessing(uint32_t *ulExpectedIdleTime)
+{
+/* place for user code */ 
+	__HAL_RCC_GPIOA_CLK_DISABLE(); 
+	__HAL_RCC_GPIOB_CLK_DISABLE(); 
+	__HAL_RCC_GPIOC_CLK_DISABLE(); 
+	__HAL_RCC_GPIOD_CLK_DISABLE(); 
+	__HAL_RCC_GPIOE_CLK_DISABLE(); 
+	__HAL_RCC_GPIOF_CLK_DISABLE();
+	__HAL_RCC_GPIOG_CLK_DISABLE();
+}
+
+__weak void PostSleepProcessing(uint32_t *ulExpectedIdleTime)
+{
+/* place for user code */
+	__HAL_RCC_GPIOA_CLK_ENABLE(); 
+	__HAL_RCC_GPIOB_CLK_ENABLE(); 
+	__HAL_RCC_GPIOC_CLK_ENABLE(); 
+	__HAL_RCC_GPIOD_CLK_ENABLE(); 
+	__HAL_RCC_GPIOE_CLK_ENABLE(); 
+	__HAL_RCC_GPIOF_CLK_ENABLE(); 
+	__HAL_RCC_GPIOG_CLK_ENABLE();
+}
+/* USER CODE END PREPOSTSLEEP */
 
 /**
   * @brief  FreeRTOS initialization
@@ -131,8 +180,11 @@ void MX_FREERTOS_Init(void) {
 	osThreadDef(ROV_MOVATION, rov_movation_task, osPriorityAboveNormal, 0, 512);
     movation_task_handle = osThreadCreate(osThread(ROV_MOVATION), NULL);
 	
-    osThreadDef(debug_info, debug_info_task, osPriorityNormal, 0, 128);
+    osThreadDef(debug_info, debug_info_task, osPriorityNormal, 0, 256);
     debug_info_handle = osThreadCreate(osThread(debug_info), NULL);
+	
+	osThreadDef(task_time_count, task_time_count_task, osPriorityAboveNormal, 0, 256);
+    task_time_count_handle = osThreadCreate(osThread(task_time_count), NULL);
 	
   /* USER CODE END RTOS_THREADS */
 

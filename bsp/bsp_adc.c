@@ -12,9 +12,9 @@ static uint16_t adcx_get_chx_value(ADC_HandleTypeDef *ADCx, uint32_t ch)
     static ADC_ChannelConfTypeDef sConfig = {0};
     sConfig.Channel = ch;
     sConfig.Rank = 1;
-		sConfig.SingleDiff=ADC_SINGLE_ENDED;  				//单边采集          		
-		sConfig.OffsetNumber=ADC_OFFSET_NONE;
-		sConfig.Offset=0;
+	sConfig.SingleDiff=ADC_SINGLE_ENDED;  				//单边采集          		
+	sConfig.OffsetNumber=ADC_OFFSET_NONE;
+	sConfig.Offset=0;
     sConfig.SamplingTime = ADC_SAMPLETIME_64CYCLES_5;//ADC_SAMPLETIME_2CYCLES_5;
 
     if (HAL_ADC_ConfigChannel(ADCx, &sConfig) != HAL_OK)

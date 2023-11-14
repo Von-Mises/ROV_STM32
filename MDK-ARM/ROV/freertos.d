@@ -79,3 +79,4 @@ rov\freertos.o: D:\Keil5\ARM\ARMCC\Bin\..\include\string.h
 rov\freertos.o: D:\Keil5\ARM\ARMCC\Bin\..\include\stdlib.h
 rov\freertos.o: ..\application\detect_task.h
 rov\freertos.o: ..\application\debug_info.h
+rov\freertos.o: ..\application\task_time_count.h

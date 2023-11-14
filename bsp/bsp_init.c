@@ -27,6 +27,7 @@
 #include "bsp_pulse.h"
 #include "bsp_pwm.h"
 #include "bsp_usart.h"
+#include "bsp_timer.h"
 #include "depth_meter_receive.h"
 #include "altimeter_receive.h"
 #include "config.h"
@@ -61,5 +62,8 @@ void bsp_init()
 	/*Add More Devices*/
 	/*高度计*/
 	//AM_init();
+	
+	/*任务计时定时器初始化*/
+	Timer_Init();
 }
 

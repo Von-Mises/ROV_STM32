@@ -79,8 +79,8 @@ void MX_FREERTOS_Init(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-	SCB->VTOR = FLASH_BASE | 0x20000;
-	__enable_irq();
+	//SCB->VTOR = FLASH_BASE | 0x20000;
+	//__enable_irq();
   /* USER CODE END 1 */
   
   /* MPU Configuration--------------------------------------------------------*/
@@ -128,6 +128,7 @@ int main(void)
   MX_TIM8_Init();
   MX_TIM2_Init();
   MX_UART5_Init();
+  MX_TIM5_Init();
   /* USER CODE BEGIN 2 */
 	bsp_init();
 	MX_LWIP_Init();
